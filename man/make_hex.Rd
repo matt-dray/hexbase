@@ -5,7 +5,7 @@
 \title{Create a Hex}
 \usage{
 make_hex(
-  filename,
+  filename = NULL,
   bg_col = "white",
   border_col = "#000000",
   border_width = 0.95,

@@ -25,8 +25,8 @@
 #'
 #' @examples \dontrun{make_hex()}
 make_hex <- function(
-    filename,
-    bg_col = "white",
+    filename = NULL,
+    bg_col = "grey90",
     border_col = "#000000",
     border_width = 0.95,
     text = "hexbase",
@@ -35,28 +35,34 @@ make_hex <- function(
     text_size = 2
 ) {
 
-  if (grepl(filename, ".png$")) {
+  if (!is.null(filename) && !grepl(filename, ".png$")) {
     stop("Argument 'filename' must end with '.png'.")
   }
 
-  if (!dir.exists(dirname(filename))) {
+  if (!is.null(filename) && !dir.exists(dirname(filename))) {
     stop("Argument 'filename' must resolve to an existing directory.")
   }
 
-  grDevices::png(
-    filename = filename,
-    width = 4.39,
-    height = 5.08,
-    units = "cm",
-    res = 1200,
-    bg = "transparent"
-  )
+  if (!is.null(filename)) {
+
+    grDevices::png(
+      filename = filename,
+      width = 4.39,
+      height = 5.08,
+      units = "cm",
+      res = 1200,
+      bg = "transparent"
+    )
+
+  }
 
   .draw_hex_base(border_col)
   .draw_hex_overlay(border_width, bg_col)
   .add_text(text, text_x, text_y, text_size)
 
-  grDevices::dev.off()
+  if (!is.null(filename)) {
+    grDevices::dev.off()
+  }
 
 }
 
