@@ -1,46 +1,93 @@
 #' Create a Hex
 #'
 #' @param filename Character. Full file path to a .png where the output PNG will
-#'     be saved. The containing directory must exist.
+#'     be saved. The containing directory must already exist.
+#' @param border_width Numeric. Thickness of the border, expressed as a ratio
+#'     of the 'inner' hexagon to 'outer' hexagon (must be less than 1).
+#' @param border_col Character. Named R colour or hex code for the border around
+#'     the hex.
 #' @param bg_col Character. Named R colour or hex code for the interior
 #'     background.
-#' @param border_col Character. Named R colour or hex code for the border around
-#'     the hex.x
-#' @param border_width Numeric. Thickness of the border, expressed as a ratio
-#'     of the 'inner' hexagon to 'outer' hexagon (must always be less than 1).
-#' @param text Character. Text to add to the hex.
+#' @param text_string Character. Text to add to the hex. Use an empty character
+#'     string if you don't want any text.
+#' @param text_col Character. Named R colour or hexadecimal code for the text
+#'     string.
+#' @param text_font Character. Font family.
 #' @param text_x Numeric. The x-axis position where the text will be placed.
+#'     Positive values will move the text to the right; negative to the left.
 #'     Defaults to 0 (centre).
 #' @param text_y Numeric. The y-axis position where the text will be placed.
-#'     Defaults to 0 (centre).
+#'     Positive values will move the text up; negative down.  Defaults to 0
+#'     (centre).
 #' @param text_size Numeric. Size of the text in pixels.
+#' @param text_rotate Numeric. Rotation of text string in degrees.
 #'
 #' @details
-#' Plots a hexagon to the dimensions of the sticker standard given by
-#' <github.com/terinjokes/StickersStandard>: 4.39 cm wide by 5.08 cm high.
+#' Writes a hexagon to the dimensions of the sticker standard given by
+#' [github.com](github.com/terinjokes/StickersStandard): 4.39 cm wide by 5.08 cm
+#' high.
 #'
-#' @return A new plot.
+#' @return Nothing.
 #'
 #' @export
 #'
-#' @examples \dontrun{make_hex()}
+#' @examples
+#' tmp <- tempfile(fileext = ".png")
+#' make_hex(tmp)
 make_hex <- function(
     filename,
-    bg_col = "white",
-    border_col = "#000000",
     border_width = 0.95,
-    text = "hexbase",
+    border_col = "black",
+    bg_col = "grey",
+    text_string = "hexbase",
+    text_col = "black",
+    text_font = "mono",
     text_x = 0,
     text_y = 0,
-    text_size = 2
+    text_size = 2,
+    text_rotate = 0
 ) {
 
-  if (grepl(filename, ".png$")) {
-    stop("Argument 'filename' must end with '.png'.")
+  if (tools::file_ext(filename) != "png") {
+    stop(
+      "Argument 'filename' must end with '.png'.",
+      call. = FALSE
+    )
   }
 
   if (!dir.exists(dirname(filename))) {
-    stop("Argument 'filename' must resolve to an existing directory.")
+    stop(
+      "Argument 'filename' must resolve to an existing directory.",
+      call. = FALSE
+    )
+  }
+
+  if (!check_is_col(bg_col) | !check_is_col(border_col) | !check_is_col(text_col)) {
+    stop(
+      "Arguments 'bg_col', 'border_col', 'text_col' must be named or hexadecimal colours.",
+      call. = FALSE
+    )
+  }
+
+  if (!inherits(text_string, "character") | !inherits(text_font, "character")) {
+    stop(
+      "Arguments 'text_string' and 'text_font' must be character strings.",
+      call. = FALSE
+    )
+  }
+
+  if (!is.numeric(text_x) | !is.numeric(text_y) | !is.numeric(text_size) | !is.numeric(text_rotate)) {
+    stop(
+      "Arguments 'text_x', 'text_y', 'text_size' and 'text_rotate' must be numeric.",
+      call. = FALSE
+    )
+  }
+
+  if (!(border_width >= 0 & border_width <= 1)) {
+    stop(
+      "Argument 'border_width' must be between 0 and 1.",
+      call. = FALSE
+    )
   }
 
   grDevices::png(
@@ -54,19 +101,22 @@ make_hex <- function(
 
   .draw_hex_base(border_col)
   .draw_hex_overlay(border_width, bg_col)
-  .add_text(text, text_x, text_y, text_size)
+
+  .add_text(
+    text_string,
+    text_col,
+    text_font,
+    text_x,
+    text_y,
+    text_size,
+    text_rotate
+  )
 
   grDevices::dev.off()
 
 }
 
 .draw_hex_base <- function(border_col) {
-
-  if (
-    !(border_col %in% grDevices::colours() | grepl("#\\d{3,6}", border_col))
-  ) {
-    stop("Argument 'border_col' must a named R colour or a hex code.")
-  }
 
   d <- 1
   a <- d / 4
@@ -77,9 +127,7 @@ make_hex <- function(
     y = c(-a, -2 * a, -a, a, 2 * a,  a)
   )
 
-  # grDevices::dev.new(width = 4.39, height = 5.08, unit = "cm")
-
-  graphics::par(mar = rep(0, 4))
+  graphics::par(mar = rep(0, 4))  # no plot margin, resets with dev.off()
 
   graphics::plot(
     coords[["x"]],
@@ -103,15 +151,7 @@ make_hex <- function(
 
 .draw_hex_overlay <- function(border_width, bg_col) {
 
-  if (!inherits(border_width, "numeric") || border_width >= 1) {
-    stop("Argument 'border_width' must be a numeric value below 1.")
-  }
-
-  if (!(bg_col %in% grDevices::colours() | grepl("#\\d{3,6}", bg_col))) {
-    stop("Argument 'border_col' must a named R colour or a hex code.")
-  }
-
-  a <- border_width / 4  # diameter / 4
+  a <- border_width / 4  # i.e. diameter / 4
   b <- sqrt(3) * a
 
   coords <- list(
@@ -128,25 +168,31 @@ make_hex <- function(
 
 }
 
-.add_text <- function(text = "hexbase", text_x, text_y, text_size) {
-
-  if (!inherits(text, "character")) {
-    stop("Argument 'text' must be a character string.")
-  }
-
-  if (!inherits(text_x, "numeric") | !inherits(text_y, "numeric")) {
-    stop("Arguments 'x_pos' and 'y_pos' must be numeric values")
-  }
-
-  if (!inherits(text_size, "numeric")) {
-    stop("Argument 'size' must be a numeric value.")
-  }
+.add_text <- function(
+    text_string,
+    text_col,
+    text_font,
+    text_x,
+    text_y,
+    text_size,
+    text_rotate
+) {
 
   graphics::text(
     x = text_x,
     y = text_y,
-    labels = text,
-    cex = text_size
+    labels = text_string,
+    cex = text_size,
+    col = text_col,
+    family = text_font,
+    srt = text_rotate
   )
 
+}
+
+check_is_col <- function(col) {
+  is_col <- col %in% grDevices::colors() |
+    grepl("^#[0-9A-Fa-f]{3}$", col) |
+    grepl("^#[0-9A-Fa-f]{6}$", col) |
+    grepl("^#[0-9A-Fa-f]{8}$", col)
 }

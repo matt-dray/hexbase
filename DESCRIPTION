@@ -3,11 +3,11 @@ Title: Make a Hex Logo
 Version: 0.0.0.9000
 Authors@R: 
     person("Matt", "Dray", , "mwdray@gmail.com", role = c("aut", "cre"))
-Description: Dependency-free way to create a hexagon-shaped logo to help promote
-    your R package or other projects. Work in progress.
-Issues: https://github.com/matt-dray/hexbase
-BugReports: https://github.com/matt-dray/hexbase/bugs
+Description: A simple, dependency-free way to create a hexagon-shaped logo
+    to help promote your R package or other projects.
 License: MIT + file LICENSE
+BugReports: https://github.com/matt-dray/hexbase/bugs
 Encoding: UTF-8
+Issues: https://github.com/matt-dray/hexbase
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.2
