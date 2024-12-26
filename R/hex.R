@@ -4,14 +4,14 @@
 #'     be saved. The containing directory must already exist.
 #' @param border_width Numeric. Thickness of the border, expressed as a ratio
 #'     of the 'inner' hexagon to 'outer' hexagon (must be less than 1).
-#' @param border_col Character. Named R colour or hex code for the border around
-#'     the hex.
-#' @param bg_col Character. Named R colour or hex code for the interior
-#'     background.
+#' @param border_col Character. Named R colour or hexadecimal code (6- or
+#'     8-digit versions) for the border around the hex.
+#' @param bg_col Character. Named R colour or hexadecimal code (6- or
+#'     8-digit versions) for the interior background.
 #' @param text_string Character. Text to add to the hex. Use an empty character
 #'     string if you don't want any text.
-#' @param text_col Character. Named R colour or hexadecimal code for the text
-#'     string.
+#' @param text_col Character. Named R colour or hexadecimal code (6- or
+#'     8-digit versions) for the text string.
 #' @param text_font Character. Name of font family available on your system.
 #' @param text_x Numeric. The x-axis position where the text will be placed.
 #'     Positive values will move the text to the right; negative to the left.
@@ -211,7 +211,6 @@ make_hex <- function(
 
 check_is_col <- function(col) {
   is_col <- col %in% grDevices::colors() |
-    grepl("^#[0-9A-Fa-f]{3}$", col) |
     grepl("^#[0-9A-Fa-f]{6}$", col) |
     grepl("^#[0-9A-Fa-f]{8}$", col)
 }

@@ -25,17 +25,17 @@ be saved. The containing directory must already exist.}
 \item{border_width}{Numeric. Thickness of the border, expressed as a ratio
 of the 'inner' hexagon to 'outer' hexagon (must be less than 1).}
 
-\item{border_col}{Character. Named R colour or hex code for the border around
-the hex.}
+\item{border_col}{Character. Named R colour or hexadecimal code (6- or
+8-digit versions) for the border around the hex.}
 
-\item{bg_col}{Character. Named R colour or hex code for the interior
-background.}
+\item{bg_col}{Character. Named R colour or hexadecimal code (6- or
+8-digit versions) for the interior background.}
 
 \item{text_string}{Character. Text to add to the hex. Use an empty character
 string if you don't want any text.}
 
-\item{text_col}{Character. Named R colour or hexadecimal code for the text
-string.}
+\item{text_col}{Character. Named R colour or hexadecimal code (6- or
+8-digit versions) for the text string.}
 
 \item{text_font}{Character. Name of font family available on your system.}
 
