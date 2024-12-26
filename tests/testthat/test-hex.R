@@ -96,7 +96,6 @@ test_that("colour", {
 
   f <- tempfile(fileext = ".png")
 
-
   expect_no_error(make_hex(f, bg_col = "red"))
   expect_no_error(make_hex(f, bg_col = "#F00"))
   expect_no_error(make_hex(f, bg_col = "#FF0000"))
