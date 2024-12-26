@@ -76,19 +76,40 @@ test_that("character", {
 
   f <- tempfile(fileext = ".png")
 
-  expect_no_error(make_hex(f, text_string = "serif"))
+  expect_no_error(make_hex(f, border_col = "red"))
+  expect_error(make_hex(f, border_col = TRUE))
+  expect_error(make_hex(f, border_col = 1))
+  expect_error(make_hex(f, border_col = list()))
+  expect_error(make_hex(f, border_col = data.frame()))
+  expect_error(make_hex(f, border_col = matrix()))
+
+  expect_no_error(make_hex(f, bg_col = "red"))
+  expect_error(make_hex(f, bg_col = TRUE))
+  expect_error(make_hex(f, bg_col = 1))
+  expect_error(make_hex(f, bg_col = list()))
+  expect_error(make_hex(f, bg_col = data.frame()))
+  expect_error(make_hex(f, bg_col = matrix()))
+
+  expect_no_error(make_hex(f, text_string = "hexbase"))
   expect_error(make_hex(f, text_string = TRUE))
   expect_error(make_hex(f, text_string = 1))
   expect_error(make_hex(f, text_string = list()))
   expect_error(make_hex(f, text_string = data.frame()))
   expect_error(make_hex(f, text_string = matrix()))
 
-  expect_no_error(make_hex(f, text_font = "serif"))
+  expect_no_error(make_hex(f, text_font= "serif"))
   expect_error(make_hex(f, text_font = TRUE))
   expect_error(make_hex(f, text_font = 1))
   expect_error(make_hex(f, text_font = list()))
   expect_error(make_hex(f, text_font = data.frame()))
   expect_error(make_hex(f, text_font = matrix()))
+
+  expect_no_error(make_hex(f, text_col = "red"))
+  expect_error(make_hex(f, text_col = TRUE))
+  expect_error(make_hex(f, text_col = 1))
+  expect_error(make_hex(f, text_col = list()))
+  expect_error(make_hex(f, text_col = data.frame()))
+  expect_error(make_hex(f, text_col = matrix()))
 
 })
 

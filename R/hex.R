@@ -62,16 +62,29 @@ make_hex <- function(
     )
   }
 
-  if (!check_is_col(bg_col) | !check_is_col(border_col) | !check_is_col(text_col)) {
+  if (!check_is_col(border_col) | !check_is_col(bg_col) | !check_is_col(text_col)) {
     stop(
-      "Arguments 'bg_col', 'border_col', 'text_col' must be named or hexadecimal colours.",
+      "Arguments 'border_col', 'bg_col', 'text_col' must be named or hexadecimal colours.",
       call. = FALSE
     )
   }
 
-  if (!inherits(text_string, "character") | !inherits(text_font, "character")) {
+  if (
+    !inherits(border_col, "character") |
+    !inherits(bg_col, "character") |
+    !inherits(text_string, "character") |
+    !inherits(text_font, "character") |
+    !inherits(text_col, "character")
+  ) {
     stop(
-      "Arguments 'text_string' and 'text_font' must be character strings.",
+      "Arguments 'border_col', 'bg_col', 'text_string', 'text_font' an 'text_col' must be character strings.",
+      call. = FALSE
+    )
+  }
+
+  if (!check_is_col(bg_col) | !check_is_col(border_col) | !check_is_col(text_col)) {
+    stop(
+      "Arguments 'bg_col', 'border_col', 'text_col' must be named or hexadecimal colours.",
       call. = FALSE
     )
   }
