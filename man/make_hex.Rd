@@ -6,48 +6,63 @@
 \usage{
 make_hex(
   filename,
-  bg_col = "white",
-  border_col = "#000000",
   border_width = 0.95,
-  text = "hexbase",
+  border_col = "black",
+  bg_col = "grey",
+  text_string = "hexbase",
+  text_col = "black",
+  text_font = "mono",
   text_x = 0,
   text_y = 0,
-  text_size = 2
+  text_size = 2,
+  text_rotate = 0
 )
 }
 \arguments{
 \item{filename}{Character. Full file path to a .png where the output PNG will
-be saved. The containing directory must exist.}
-
-\item{bg_col}{Character. Named R colour or hex code for the interior
-background.}
-
-\item{border_col}{Character. Named R colour or hex code for the border around
-the hex.x}
+be saved. The containing directory must already exist.}
 
 \item{border_width}{Numeric. Thickness of the border, expressed as a ratio
-of the 'inner' hexagon to 'outer' hexagon (must always be less than 1).}
+of the 'inner' hexagon to 'outer' hexagon (must be less than 1).}
 
-\item{text}{Character. Text to add to the hex.}
+\item{border_col}{Character. Named R colour or hexadecimal code (6- or
+8-digit versions) for the border around the hex.}
+
+\item{bg_col}{Character. Named R colour or hexadecimal code (6- or
+8-digit versions) for the interior background.}
+
+\item{text_string}{Character. Text to add to the hex. Use an empty character
+string if you don't want any text.}
+
+\item{text_col}{Character. Named R colour or hexadecimal code (6- or
+8-digit versions) for the text string.}
+
+\item{text_font}{Character. Name of font family available on your system.}
 
 \item{text_x}{Numeric. The x-axis position where the text will be placed.
+Positive values will move the text to the right; negative to the left.
 Defaults to 0 (centre).}
 
 \item{text_y}{Numeric. The y-axis position where the text will be placed.
-Defaults to 0 (centre).}
+Positive values will move the text up; negative down.  Defaults to 0
+(centre).}
 
 \item{text_size}{Numeric. Size of the text in pixels.}
+
+\item{text_rotate}{Numeric. Rotation of text string in degrees.}
 }
 \value{
-A new plot.
+Nothing.
 }
 \description{
 Create a Hex
 }
 \details{
-Plots a hexagon to the dimensions of the sticker standard given by
-<github.com/terinjokes/StickersStandard>: 4.39 cm wide by 5.08 cm high.
+Writes a hexagon to the dimensions of the sticker standard given by
+\href{github.com/terinjokes/StickersStandard}{github.com}: 4.39 cm wide by 5.08 cm
+high.
 }
 \examples{
-\dontrun{make_hex()}
+tmp <- tempfile(fileext = ".png")
+make_hex(tmp)
 }

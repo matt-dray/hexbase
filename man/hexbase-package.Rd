@@ -6,7 +6,7 @@
 \alias{hexbase-package}
 \title{hexbase: Make a Hex Logo}
 \description{
-Dependency-free way to create a hexagon-shaped logo to help promote your R package or other projects. Work in progress.
+A simple, dependency-free way to create a hexagon-shaped logo to help promote your R package or other projects.
 }
 \seealso{
 Useful links:
