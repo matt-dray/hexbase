@@ -12,7 +12,7 @@
 #'     string if you don't want any text.
 #' @param text_col Character. Named R colour or hexadecimal code for the text
 #'     string.
-#' @param text_font Character. Font family.
+#' @param text_font Character. Name of font family available on your system.
 #' @param text_x Numeric. The x-axis position where the text will be placed.
 #'     Positive values will move the text to the right; negative to the left.
 #'     Defaults to 0 (centre).
@@ -76,9 +76,15 @@ make_hex <- function(
     )
   }
 
-  if (!is.numeric(text_x) | !is.numeric(text_y) | !is.numeric(text_size) | !is.numeric(text_rotate)) {
+  if (
+    !is.numeric(border_width) |
+    !is.numeric(text_x) |
+    !is.numeric(text_y) |
+    !is.numeric(text_size) |
+    !is.numeric(text_rotate)
+  ) {
     stop(
-      "Arguments 'text_x', 'text_y', 'text_size' and 'text_rotate' must be numeric.",
+      "Arguments 'border_width', 'text_x', 'text_y', 'text_size' and 'text_rotate' must be numeric.",
       call. = FALSE
     )
   }
@@ -127,7 +133,7 @@ make_hex <- function(
     y = c(-a, -2 * a, -a, a, 2 * a,  a)
   )
 
-  graphics::par(mar = rep(0, 4))  # no plot margin, resets with dev.off()
+  graphics::par(mar = rep(0, 4))  # no plot margin, resets with dev.o
 
   graphics::plot(
     coords[["x"]],

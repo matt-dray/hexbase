@@ -37,7 +37,7 @@ string if you don't want any text.}
 \item{text_col}{Character. Named R colour or hexadecimal code for the text
 string.}
 
-\item{text_font}{Character. Font family.}
+\item{text_font}{Character. Name of font family available on your system.}
 
 \item{text_x}{Numeric. The x-axis position where the text will be placed.
 Positive values will move the text to the right; negative to the left.
