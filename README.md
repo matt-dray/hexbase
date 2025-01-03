@@ -8,7 +8,7 @@
 
 A (limited (concept (base R only))) R package to create very simple hex logos.
 
-If you want actual hex-making functionality via R, you should try:
+If you want a more complete hex-making experience, you should try:
 
 * [{bunny}](https://github.com/dmi3kno/bunny) by Dmytro Perepolkin
 * [{hexSticker}](https://github.com/GuangchuangYu/hexSticker) by Guangchuang Yu
@@ -17,7 +17,7 @@ If you want actual hex-making functionality via R, you should try:
 You can install {hexbase} from GitHub like:
 
 ``` r
-# install.packages("remotes")  # if not yet installed
+install.packages("remotes")  # if not yet installed
 remotes::install_github("matt-dray/hexbase")
 ```
 
