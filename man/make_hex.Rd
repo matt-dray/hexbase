@@ -2,74 +2,123 @@
 % Please edit documentation in R/hexagon.R
 \name{make_hex}
 \alias{make_hex}
-\title{Create a Hex}
+\title{Create a Hex Sticker}
 \usage{
 make_hex(
-  file = "~/Desktop/test.png",
-  open = TRUE,
+  file,
+  open = FALSE,
   border_width = 0.95,
   border_col = "black",
   bg_col = "grey",
-  text_string = "hexbase",
+  text_string = "example",
   text_x = 0.5,
-  text_y = 0.4,
-  text_col = "red",
+  text_y = 0.35,
+  text_angle = 0,
   text_size = 20,
+  text_col = "red",
   text_font = "mono",
   img_object = png::readPNG(system.file("img", "Rlogo.png", package = "png")),
   img_x = 0.5,
   img_y = 0.6,
-  img_width = 0.37,
-  img_height = 0.3
+  img_width = 0.45,
+  img_height = 0.35,
+  img_angle = 0
 )
 }
 \arguments{
 \item{file}{Character. Full file path to a .png where the output PNG will be
 saved. The containing directory must already exist.}
 
-\item{open}{Logical. Open the PNG file once written? Defaults to \code{TRUE}.}
+\item{open}{Logical. Open the PNG file once written?}
 
 \item{border_width}{Numeric. Thickness of the border, expressed as a ratio
 of the 'inner' hexagon to 'outer' hexagon (must be less than 1).}
 
-\item{border_col}{Character. Named R colour or hexadecimal code (6- or
-8-digit versions) for the border around the hex.}
+\item{border_col}{Character. Named R colour or hexadecimal code for the
+border around the hex. See details.}
 
-\item{bg_col}{Character. Named R colour or hexadecimal code (6- or
-8-digit versions) for the interior background.}
+\item{bg_col}{Character. Named R colour or hexadecimal code for the interior
+background. See details.}
 
-\item{text_string}{Character. Text to add to the hex. Use an empty character
-string if you don't want any text.}
+\item{text_string}{Character. Text to display. Use an empty character string
+if you don't want to place text.}
 
-\item{text_x}{Numeric. The x-axis position where the text will be placed.
-Positive values will move the text to the right; negative to the left.
-Defaults to 0 (centre).}
+\item{text_x}{Numeric. The x-axis position where the text will be placed. See
+details.}
 
-\item{text_y}{Numeric. The y-axis position where the text will be placed.
-Positive values will move the text up; negative down.  Defaults to 0
-(centre).}
+\item{text_y}{Numeric. The y-axis position where the text will be placed. See
+details.}
 
-\item{text_col}{Character. Named R colour or hexadecimal code (6- or
-8-digit versions) for the text string.}
+\item{text_angle}{Numeric. Rotation of text string in degrees.}
 
 \item{text_size}{Numeric. Size of the text in pixels.}
 
+\item{text_col}{Character. Named R colour or hexadecimal code for the text
+string. See details.}
+
 \item{text_font}{Character. Name of font family available on your system.}
 
-\item{text_rotate}{Numeric. Rotation of text string in degrees.}
+\item{img_object}{Array. A PNG file read in by the user. Use \code{NULL} if you
+don't want to place an image.}
+
+\item{img_x}{Numeric. The x-axis position where the image will be placed. See
+details.}
+
+\item{img_y}{Numeric. The y-axis position where the image will be placed. See
+details.}
+
+\item{img_width}{Numeric. The width of the image.}
+
+\item{img_height}{Numeric. The height of the image.}
+
+\item{img_angle}{Numeric. Rotation of text string in degrees.}
 }
 \value{
-Nothing.
+None.
 }
 \description{
-Create a Hex
+Generate a simple hexagon-shaped sticker design with a border, image and
+text.
 }
 \details{
-Writes a hexagon to the dimensions of the sticker standard given by
-\href{github.com/terinjokes/StickersStandard}{github.com}: 4.39 cm wide by 5.08 cm
-high.
+\subsection{Dimensions}{
+
+Writes a hexagon to the dimensions of
+\href{https://sticker.how/#type-hexagon}{the Stickers Standard}: 4.39 cm wide by
+5.08 cm high (2 by 1.73 inches).
+
+Any elements falling outside of the hexagon will be clipped out.
+}
+
+\subsection{Coordinates}{
+
+Coordinates should be provided as native units ('Normalised Parent
+Coordinates'), which means that the x- and y-axes range from 0 to 1. This
+applies to arguments \code{text_x}, \code{text_y}, \code{img_x}, \code{img_y}, \code{img_width} and
+\code{img_height}.
+}
+
+\subsection{Colours}{
+
+Named colour values must be listed in \code{\link[grDevices:colors]{grDevices::colours()}}. Hexadecimal
+colour values must be provided with length 6 or 8 and must begin with an
+octothorpe (\verb{#}). This applies to arguments \code{border_col}, \code{bg_col} and
+\code{text_col}.
+}
+
+\subsection{Write order}{
+
+The order of action when building the sticker is:
+\enumerate{
+\item Add outer hexagon.
+\item Add inner hexagon.
+\item Add image.
+\item Add text.
+\item Clip to outer hexagon.
+}
+}
 }
 \examples{
 tmp <- tempfile(fileext = ".png")
-make_hex(tmp)
+make_hex(file = tmp, open = FALSE)
 }

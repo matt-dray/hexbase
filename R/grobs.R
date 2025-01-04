@@ -21,14 +21,23 @@
     gp = grid::gpar(
       col = text_col,
       fontsize = text_size,
-      fontfamily = text_font
+      fontfamily = text_font,
+      lineheight = 0.75
     )
   )
 }
 
-.engrob_img <- function(img_object, img_width, img_height) {
+.engrob_img <- function(
+    img_object,
+    img_x,
+    img_y,
+    img_width,
+    img_height
+) {
   grid::rasterGrob(
     img_object,
+    x = grid::unit(img_x, "npc"),
+    y = grid::unit(img_y, "npc"),
     width = grid::unit(img_width, "npc"),
     height = grid::unit(img_height, "npc")
   )
