@@ -19,15 +19,9 @@ The package's only function, `make_hex()`, is intentionally limited and opiniona
 * provide an image from file and adjust its location, size and rotation
 * save to PNG with the dimensions of [the Stickers Standard](https://sticker.how/#type-hexagon)
 
-For more established hex-making tools, try:
-
-* [{hexSticker}](https://github.com/GuangchuangYu/hexSticker) by Guangchuang Yu
-* [{bunny}](https://github.com/dmi3kno/bunny) by Dmytro Perepolkin
-* the [hexmake](https://connect.thinkr.fr/hexmake/) Shiny app by Colin Fay
-
 ## Install
 
-You can install {hexbase} from GitHub like:
+You can install {hexbase} [from GitHub](https://github.com/matt-dray/hexbase) like:
 
 ``` r
 install.packages("remotes")  # if not yet installed
@@ -41,45 +35,30 @@ It's composed of two main elements: an image (a grey-bordered white hexagon) wit
 
 <img src="man/figures/hexbase-logo.png" width=200>
 
-Images can't be added directly onto a hex logo. You must read in an image file.
-As such, the inner grey-bordered hexagon is itself an image made with {hexbase}.
-To create it, you call the `make_hex()` function with minimal inputs. 
-It's saved to a `file` location as PNG.
+You can make this hex using the `make_hex()` function.
+The output is saved to a PNG at the `file` location with [standard dimensions](https://sticker.how/#type-hexagon).
 
 ``` r
-image_temp <- tempfile("image", fileext = ".png")
+# Create temporary PNG file where hex will be written
+temp_path <- tempfile(fileext = ".png")
 
+# Read an image file to use as an element in the hex
+image_path <- system.file("images", "hexagon.png", package = "hexbase")
+image_png <- png::readPNG(image_path)
+
+# Generate the hex with border, background, text and image elements
 hexbase::make_hex(
-  file = image_temp,
-  open = FALSE,  # don't open a preview
-  border_width = 0.8,
-  border_col = "grey",
-  bg_col = "white",
-  text_string = "",  # no text
-  img_object = NULL  # no image
-)
-```
-
-To create the actual hex logo, you supply several more arguments `make_hex()` to help colour and place the various elements.
-You can use [the {png} package](https://cran.r-project.org/package=png) to read in the PNG we just created, passing the resulting object to the `img_object` argument.
-I've installed [Routed Gothic](https://webonastick.com/fonts/routed-gothic/) on my computer, so I can name it as the `text_font`.
-
-``` r
-hex_temp <- tempfile("hex", fileext = ".png")
-image_png <- png::readPNG(image_temp)
-
-hexbase::make_hex(
-  file = hex_temp,
-  open = FALSE,
-  border_col = "grey",
+  file_path = temp_path,
+  file_open = TRUE,  # open the file after being written
+  border_col = "grey",  # named colour or hexadecimal
   bg_col = "darkblue",
-  text_string = "hex\nbase",
+  text_string = "hex\nbase",  # includes linebreak
   text_x = 0.5,
   text_y = 0.5,
   text_angle = 30,
   text_size = 18,
   text_col = "darkblue",
-  text_font = "Routed Gothic Wide",
+  text_font = "Routed Gothic Wide",  # downloaded via https://webonastick.com/fonts/routed-gothic/
   img_object = image_png,
   img_x = 0.5,
   img_y = 0.5,
@@ -89,5 +68,10 @@ hexbase::make_hex(
 )
 ```
 
-The output is saved to PNG with [standard dimensions](https://sticker.how/#type-hexagon)).
-Set `open = TRUE` to automatically open the file after it's written.
+## Related
+
+For more established hex-making tools with R, try:
+
+* [{hexSticker}](https://github.com/GuangchuangYu/hexSticker) by Guangchuang Yu
+* [{bunny}](https://github.com/dmi3kno/bunny) by Dmytro Perepolkin
+* the [hexmake](https://connect.thinkr.fr/hexmake/) Shiny app by Colin Fay
