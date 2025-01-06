@@ -1,42 +1,16 @@
-# outer ----
-
-.get_outer_hex_coords <- function() {
-
-  d <- 1
+.get_hex_coords <- function(d = 1) {
   a <- d / 2
   b <- sqrt(3) * a
-
   list(
     x = c(-b,      0,  b, b,     0, -b),
     y = c(-a, -2 * a, -a, a, 2 * a,  a)
   )
-
-}
-
-.get_outer_hex_coords_scaled <- function(coords_outer) {
-  coords_outer_scaled <- lapply(coords_outer, .scale_outer_coords)
-  coords_outer_scaled
 }
 
 .scale_outer_coords <- function(outer_coord_val) {
   num <- outer_coord_val - min(outer_coord_val)
   dem <- max(outer_coord_val) - min(outer_coord_val)
   num / dem
-}
-
-
-# inner ----
-
-.get_inner_hex_coords <- function(border_width) {
-
-  a <- border_width / 2
-  b <- sqrt(3) * a
-
-  list(
-    x = c(-b,       0,  b, b,      0, -b),
-    y = c(-a,  -2 * a, -a, a,  2 * a,  a)
-  )
-
 }
 
 .get_inner_hex_coords_scaled <- function(coords_inner, coords_outer) {

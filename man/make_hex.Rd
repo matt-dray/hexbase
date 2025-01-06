@@ -2,76 +2,70 @@
 % Please edit documentation in R/hexagon.R
 \name{make_hex}
 \alias{make_hex}
-\title{Create a Hex Sticker}
+\title{Write a Hex Sticker to File}
 \usage{
 make_hex(
-  file,
-  open = FALSE,
+  file_path,
+  file_open = FALSE,
   border_width = 0.95,
-  border_col = "black",
-  bg_col = "grey",
+  border_col = "blue",
+  bg_col = "grey80",
   text_string = "example",
   text_x = 0.5,
-  text_y = 0.35,
+  text_y = 0.5,
   text_angle = 0,
   text_size = 20,
   text_col = "red",
   text_font = "mono",
-  img_object = png::readPNG(system.file("img", "Rlogo.png", package = "png")),
+  img_object = NULL,
   img_x = 0.5,
-  img_y = 0.6,
-  img_width = 0.45,
-  img_height = 0.35,
+  img_y = 0.5,
+  img_width = 0.5,
+  img_height = 0.5,
   img_angle = 0
 )
 }
 \arguments{
-\item{file}{Character. Full file path to a .png where the output PNG will be
-saved. The containing directory must already exist.}
+\item{file_path}{Character. Full file path to a .png where the output file
+will be saved. The containing directory must already exist.}
 
-\item{open}{Logical. Open the PNG file once written?}
+\item{file_open}{Logical. Open the PNG file once it's written?}
 
 \item{border_width}{Numeric. Thickness of the border, expressed as a ratio
 of the 'inner' hexagon to 'outer' hexagon (must be less than 1).}
 
 \item{border_col}{Character. Named R colour or hexadecimal code for the
-border around the hex. See details.}
+border around the hex.}
 
 \item{bg_col}{Character. Named R colour or hexadecimal code for the interior
-background. See details.}
+background.}
 
 \item{text_string}{Character. Text to display. Use an empty character string
 if you don't want to place text.}
 
-\item{text_x}{Numeric. The x-axis position where the text will be placed. See
-details.}
+\item{text_x}{Numeric. Text location x-axis.}
 
-\item{text_y}{Numeric. The y-axis position where the text will be placed. See
-details.}
+\item{text_y}{Numeric. Text location y-axis.}
 
 \item{text_angle}{Numeric. Rotation of text string in degrees.}
 
-\item{text_size}{Numeric. Size of the text in pixels.}
+\item{text_size}{Numeric. Text point-size.}
 
-\item{text_col}{Character. Named R colour or hexadecimal code for the text
-string. See details.}
+\item{text_col}{Character. Text colour. A named R colour or hexadecimal code.}
 
-\item{text_font}{Character. Name of font family available on your system.}
+\item{text_font}{Character. Name of a font family available on your system.}
 
-\item{img_object}{Array. A PNG file read in by the user. Use \code{NULL} if you
-don't want to place an image.}
+\item{img_object}{Array. A PNG file read in by the user. \code{NULL} for no image.}
 
-\item{img_x}{Numeric. The x-axis position where the image will be placed. See
-details.}
+\item{img_x}{Numeric. Image location x-axis.}
 
-\item{img_y}{Numeric. The y-axis position where the image will be placed. See
-details.}
+\item{img_y}{Numeric. Image location y-axis.}
 
-\item{img_width}{Numeric. The width of the image.}
+\item{img_width}{Numeric. Image width.}
 
-\item{img_height}{Numeric. The height of the image.}
+\item{img_height}{Numeric. Image height.}
 
-\item{img_angle}{Numeric. Rotation of text string in degrees.}
+\item{img_angle}{Numeric. Text rotation in degrees.}
 }
 \value{
 None.
@@ -93,22 +87,28 @@ Any elements falling outside of the hexagon will be clipped out.
 \subsection{Coordinates}{
 
 Coordinates should be provided as native units ('Normalised Parent
-Coordinates'), which means that the x- and y-axes range from 0 to 1. This
-applies to arguments \code{text_x}, \code{text_y}, \code{img_x}, \code{img_y}, \code{img_width} and
-\code{img_height}.
+Coordinates'), which means that the x- and y-axes range from 0 to 1 with the
+centre at x = 0.5 and y = 0.5. Coordinates x and y are relative to the angle
+of the element. Coordindates x and y relate to the centre of the image or
+text to which they apply.
+
+This applies to arguments \code{text_x}, \code{text_y}, \code{img_x}, \code{img_y}, \code{img_width}
+and \code{img_height}.
 }
 
 \subsection{Colours}{
 
 Named colour values must be listed in \code{\link[grDevices:colors]{grDevices::colours()}}. Hexadecimal
 colour values must be provided with length 6 or 8 and must begin with an
-octothorpe (\verb{#}). This applies to arguments \code{border_col}, \code{bg_col} and
-\code{text_col}.
+octothorpe (\verb{#}).
+
+This applies to arguments \code{border_col}, \code{bg_col} and \code{text_col}.
 }
 
 \subsection{Write order}{
 
-The order of action when building the sticker is:
+Each subsequent element overlays the last. The order of action when building
+the hex is:
 \enumerate{
 \item Add outer hexagon.
 \item Add inner hexagon.
@@ -120,5 +120,5 @@ The order of action when building the sticker is:
 }
 \examples{
 tmp <- tempfile(fileext = ".png")
-make_hex(file = tmp, open = FALSE)
+make_hex(file_path = tmp)
 }

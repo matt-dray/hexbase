@@ -1,37 +1,31 @@
-#' Create a Hex Sticker
+#' Write a Hex Sticker to File
 #'
 #' Generate a simple hexagon-shaped sticker design with a border, image and
 #' text.
 #'
-#' @param file Character. Full file path to a .png where the output PNG will be
-#'     saved. The containing directory must already exist.
-#' @param open Logical. Open the PNG file once written?
+#' @param file_path Character. Full file path to a .png where the output file
+#'     will be saved. The containing directory must already exist.
+#' @param file_open Logical. Open the PNG file once it's written?
 #' @param border_width Numeric. Thickness of the border, expressed as a ratio
 #'     of the 'inner' hexagon to 'outer' hexagon (must be less than 1).
 #' @param border_col Character. Named R colour or hexadecimal code for the
-#'     border around the hex. See details.
+#'     border around the hex.
 #' @param bg_col Character. Named R colour or hexadecimal code for the interior
-#'     background. See details.
+#'     background.
 #' @param text_string Character. Text to display. Use an empty character string
 #'     if you don't want to place text.
-#' @param text_x Numeric. The x-axis position where the text will be placed. See
-#'     details.
-#' @param text_y Numeric. The y-axis position where the text will be placed. See
-#'     details.
+#' @param text_x Numeric. Text location x-axis.
+#' @param text_y Numeric. Text location y-axis.
 #' @param text_angle Numeric. Rotation of text string in degrees.
-#' @param text_size Numeric. Size of the text in pixels.
-#' @param text_col Character. Named R colour or hexadecimal code for the text
-#'     string. See details.
-#' @param text_font Character. Name of font family available on your system.
-#' @param img_object Array. A PNG file read in by the user. Use `NULL` if you
-#'     don't want to place an image.
-#' @param img_x Numeric. The x-axis position where the image will be placed. See
-#'     details.
-#' @param img_y Numeric. The y-axis position where the image will be placed. See
-#'     details.
-#' @param img_width Numeric. The width of the image.
-#' @param img_height Numeric. The height of the image.
-#' @param img_angle Numeric. Rotation of text string in degrees.
+#' @param text_size Numeric. Text point-size.
+#' @param text_col Character. Text colour. A named R colour or hexadecimal code.
+#' @param text_font Character. Name of a font family available on your system.
+#' @param img_object Array. A PNG file read in by the user. `NULL` for no image.
+#' @param img_x Numeric. Image location x-axis.
+#' @param img_y Numeric. Image location y-axis.
+#' @param img_width Numeric. Image width.
+#' @param img_height Numeric. Image height.
+#' @param img_angle Numeric. Text rotation in degrees.
 #'
 #' @details
 #'
@@ -46,20 +40,26 @@
 #' ## Coordinates
 #'
 #' Coordinates should be provided as native units ('Normalised Parent
-#' Coordinates'), which means that the x- and y-axes range from 0 to 1. This
-#' applies to arguments `text_x`, `text_y`, `img_x`, `img_y`, `img_width` and
-#' `img_height`.
+#' Coordinates'), which means that the x- and y-axes range from 0 to 1 with the
+#' centre at x = 0.5 and y = 0.5. Coordinates x and y are relative to the angle
+#' of the element. Coordindates x and y relate to the centre of the image or
+#' text to which they apply.
+#'
+#' This applies to arguments `text_x`, `text_y`, `img_x`, `img_y`, `img_width`
+#' and `img_height`.
 #'
 #' ## Colours
 #'
 #' Named colour values must be listed in [grDevices::colours()]. Hexadecimal
 #' colour values must be provided with length 6 or 8 and must begin with an
-#' octothorpe (`#`). This applies to arguments `border_col`, `bg_col` and
-#' `text_col`.
+#' octothorpe (`#`).
+#'
+#' This applies to arguments `border_col`, `bg_col` and `text_col`.
 #'
 #' ## Write order
 #'
-#' The order of action when building the sticker is:
+#' Each subsequent element overlays the last. The order of action when building
+#' the hex is:
 #'
 #' 1. Add outer hexagon.
 #' 2. Add inner hexagon.
@@ -73,30 +73,30 @@
 #'
 #' @examples
 #' tmp <- tempfile(fileext = ".png")
-#' make_hex(file = tmp, open = FALSE)
+#' make_hex(file_path = tmp)
 make_hex <- function(
-    file,
-    open = FALSE,
+    file_path,
+    file_open = FALSE,
     border_width = 0.95,
-    border_col = "black",
-    bg_col = "grey",
+    border_col = "blue",
+    bg_col = "grey80",
     text_string = "example",
     text_x = 0.5,
-    text_y = 0.35,
+    text_y = 0.5,
     text_angle = 0,
     text_size = 20,
     text_col = "red",
     text_font = "mono",
-    img_object = png::readPNG(system.file("img", "Rlogo.png", package = "png")),
+    img_object = NULL,
     img_x = 0.5,
-    img_y = 0.6,
-    img_width = 0.45,
-    img_height = 0.35,
+    img_y = 0.5,
+    img_width = 0.5,
+    img_height = 0.5,
     img_angle = 0
 ) {
 
   grDevices::png(
-    filename = file,
+    filename = file_path,
     width = 4.39,
     height = 5.08,
     units = "cm",
@@ -104,13 +104,12 @@ make_hex <- function(
     bg = "transparent"
   )
 
-  coords_outer <- .get_outer_hex_coords()
-  coords_outer_scaled <- .get_outer_hex_coords_scaled(coords_outer)
-
-  coords_inner <- .get_inner_hex_coords(border_width)
-  coords_inner_scaled <- .get_inner_hex_coords_scaled(coords_inner, coords_outer)
-
+  coords_outer <- .get_hex_coords(d = 1)
+  coords_outer_scaled <- lapply(coords_outer, .scale_outer_coords)
   grob_outer <- .engrob_hex(coords_outer_scaled, border_col)
+
+  coords_inner <- .get_hex_coords(d = border_width)
+  coords_inner_scaled <- .get_inner_hex_coords_scaled(coords_inner, coords_outer)
   grob_inner <- .engrob_hex(coords_inner_scaled, bg_col)
 
   grob_text  <- .engrob_text(
@@ -155,8 +154,8 @@ make_hex <- function(
 
   grid::popViewport()  # clip
 
-  dev.off()
+  grDevices::dev.off()
 
-  if (open) system(paste("open", file))
+  if (file_open) system(paste("open", file_path))
 
 }
