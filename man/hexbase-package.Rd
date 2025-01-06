@@ -4,13 +4,14 @@
 \name{hexbase-package}
 \alias{hexbase}
 \alias{hexbase-package}
-\title{hexbase: Make a Hex Logo}
+\title{hexbase: Simple Dependency-Free Hex Logos}
 \description{
-A simple, dependency-free way to create a hexagon-shaped logo to help promote your R package or other projects.
+A simple, dependency-free way to create hexagon-shaped logos to help promote your R package or other projects.
 }
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://github.com/matt-dray/hexbase}
   \item Report bugs at \url{https://github.com/matt-dray/hexbase/bugs}
 }
 

@@ -2,41 +2,76 @@
 # {hexbase}
 
 <!-- badges: start -->
-[![Project Status: Concept – Minimal or no implementation has been done yet, or the repository is only intended to be a limited example, demo, or proof-of-concept.](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
+[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![R-CMD-check](https://github.com/matt-dray/hexbase/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/matt-dray/hexbase/actions/workflows/R-CMD-check.yaml)
+[![test-coverage](https://github.com/matt-dray/hexbase/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/matt-dray/hexbase/actions/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
-A (limited (concept (base R only))) R package to create very simple hex logos.
+## What
 
-If you want actual hex-making functionality via R, you should try:
+A dependency-free R package to help create simple hexagon-shaped sticker logos.
 
-* [{bunny}](https://github.com/dmi3kno/bunny) by Dmytro Perepolkin
-* [{hexSticker}](https://github.com/GuangchuangYu/hexSticker) by Guangchuang Yu
-* [hexmake](https://connect.thinkr.fr/hexmake/) Shiny app by Colin Fay
+The package's only function, `make_hex()`, is intentionally limited and opinionated. You can only:
 
-You can install {hexbase} from GitHub like:
+* adjust the width and colour of the border
+* colour the background
+* add text and adjust its location, rotation, size, colour and font family
+* provide an image from file and adjust its location, size and rotation
+* save to PNG with the dimensions of [the Stickers Standard](https://sticker.how/#type-hexagon)
+
+## Install
+
+You can install {hexbase} [from GitHub](https://github.com/matt-dray/hexbase) like:
 
 ``` r
-# install.packages("remotes")  # if not yet installed
+install.packages("remotes")  # if not yet installed
 remotes::install_github("matt-dray/hexbase")
 ```
 
-It doesn't do much yet. The function `make_hex()` will lay down a hexagon with another smaller one on top. The exposed region between the two creates a border. Some text can be overlaid. It saves out to PNG. The background is transparent.
+## Example
+
+Here's the hex logo for {hexbase}, which was made using {hexbase} (so meta).
+It's composed of two main elements: an image (a grey-bordered white hexagon) with some text ('hexbase') overlaid.
+
+<img src="man/figures/hexbase-logo.png" width=200>
+
+You can make this hex using the `make_hex()` function.
+The output is saved to a PNG at the `file` location with [standard dimensions](https://sticker.how/#type-hexagon).
 
 ``` r
+# Create temporary PNG file where hex will be written
+temp_path <- tempfile(fileext = ".png")
+
+# Read an image file to use as an element in the hex
+image_path <- system.file("images", "hexagon.png", package = "hexbase")
+image_png <- png::readPNG(image_path)
+
+# Generate the hex with border, background, text and image elements
 hexbase::make_hex(
-  filename = "~/Documents/hexbase.png",
-  border_width = 0.95,
-  border_col = "black",
-  bg_col = "grey",
-  text_string = "hexbase",
-  text_col = "black",
-  text_font = "mono",
-  text_x = 0,
-  text_y = 0,
-  text_size = 2,
-  text_rotate = 0
+  file_path = temp_path,
+  file_open = TRUE,  # open the file after being written
+  border_col = "grey",  # named colour or hexadecimal
+  bg_col = "darkblue",
+  text_string = "hex\nbase",  # includes linebreak
+  text_x = 0.5,
+  text_y = 0.5,
+  text_angle = 30,
+  text_size = 18,
+  text_col = "darkblue",
+  text_font = "Routed Gothic Wide",  # downloaded via https://webonastick.com/fonts/routed-gothic/
+  img_object = image_png,
+  img_x = 0.5,
+  img_y = 0.5,
+  img_width = 0.7,
+  img_height = 0.7,
+  img_angle = 30
 )
 ```
 
-<img src="man/figures/hexbase.png" width=200>
+## Related
+
+For more established hex-making tools with R, try:
+
+* [{hexSticker}](https://github.com/GuangchuangYu/hexSticker) by Guangchuang Yu
+* [{bunny}](https://github.com/dmi3kno/bunny) by Dmytro Perepolkin
+* the [hexmake](https://connect.thinkr.fr/hexmake/) Shiny app by Colin Fay

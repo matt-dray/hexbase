@@ -1,16 +1,20 @@
 Package: hexbase
-Title: Make a Hex Logo
+Title: Create Simple Dependency-Free Hex Logos
 Version: 0.0.0.9000
 Authors@R: 
     person("Matt", "Dray", , "mwdray@gmail.com", role = c("aut", "cre"))
-Description: A simple, dependency-free way to create a hexagon-shaped logo
-    to help promote your R package or other projects.
+Description: A simple interface to create hexagon-shaped logos that help
+    promote your R package or other projects. Uses only base R.
 License: MIT + file LICENSE
+URL: https://github.com/matt-dray/hexbase
 BugReports: https://github.com/matt-dray/hexbase/bugs
+Imports: 
+    grDevices,
+    grid
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
 Encoding: UTF-8
 Issues: https://github.com/matt-dray/hexbase
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Suggests: 
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
