@@ -1,5 +1,5 @@
 
-# {hexbase}
+# {hexbase} <a href="https://github.com/matt-dray/hexbase"><img src="man/figures/logo.png" align="right" height="139" alt='A hexagon sticker logo for the package hexbase. It has a darkblue hexagon with a grey border. There is an a white hexagon with a thick grey border inside. In the centre is darkblue text saying hexbase.'/></a>
 
 <!-- badges: start -->
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
@@ -11,7 +11,7 @@
 
 A dependency-free R package to help create simple hexagon-shaped sticker logos.
 
-The package's only function, `make_hex()`, is intentionally limited and opinionated. You can only:
+The package's only function, `make_hex()`, is intentionally limited and opinionated. For now, you can only:
 
 * adjust the width and colour of the border
 * colour the background
@@ -30,13 +30,12 @@ remotes::install_github("matt-dray/hexbase")
 
 ## Example
 
-Here's the hex logo for {hexbase}, which was made using {hexbase} (so meta).
-It's composed of two main elements: an image (a grey-bordered white hexagon) with some text ('hexbase') overlaid.
-
-<img src="man/figures/hexbase-logo.png" width=200>
+The hex logo for {hexbase} was made using {hexbase} (so meta).
+You can see it at the top of this README.
+It's composed of two main elements: an image (a grey-bordered white hexagon) read from a PNG file overlaid with some text ('hexbase').
 
 You can make this hex using the `make_hex()` function.
-The output is saved to a PNG at the `file` location with [standard dimensions](https://sticker.how/#type-hexagon).
+The output is saved to a PNG at the `file_path` location.
 
 ``` r
 # Create temporary PNG file where hex will be written
@@ -52,13 +51,13 @@ hexbase::make_hex(
   file_open = TRUE,  # open the file after being written
   border_col = "grey",  # named colour or hexadecimal
   bg_col = "darkblue",
-  text_string = "hex\nbase",  # includes linebreak
-  text_x = 0.5,
-  text_y = 0.5,
-  text_angle = 30,
-  text_size = 18,
-  text_col = "darkblue",
-  text_font = "Routed Gothic Wide",  # downloaded via https://webonastick.com/fonts/routed-gothic/
+  txt_string = "hex\nbase",  # includes linebreak
+  txt_x = 0.5,
+  txt_y = 0.5,
+  txt_angle = 30,
+  txt_size = 18,
+  txt_col = "darkblue",
+  txt_font = "Routed Gothic Wide",  # downloaded via webonastick.com/fonts/routed-gothic/
   img_object = image_png,
   img_x = 0.5,
   img_y = 0.5,
