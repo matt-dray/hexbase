@@ -1,3 +1,7 @@
+#' Create Graphics Object: Hexagon
+#' @param coords List. Coordinates to draw polygon. Elements named `x` and `y`.
+#' @param fill_col Character. Named or hexadecimal colour.
+#' @noRd
 .engrob_hex <- function(coords, fill_col) {
   grid::polygonGrob(
     coords[["x"]],
@@ -6,39 +10,20 @@
   )
 }
 
-.engrob_text <- function(
-    text_string,
-    text_x,
-    text_y,
-    text_col,
-    text_size,
-    text_font
-) {
+#' Create Graphics Object: Text
+#' @param txt_string Character. Text to print on hex.
+#' @param txt_col Character. Named or hexadecimal colour.
+#' @param txt_size Numeric. Point size of text.
+#' @param txt_font Character. Font family for text. Must exist on system.
+#' @noRd
+.engrob_text <- function(txt_string, txt_col, txt_size, txt_font) {
   grid::textGrob(
-    text_string,
-    x = grid::unit(text_x, "npc"),
-    y = grid::unit(text_y, "npc"),
+    txt_string,
     gp = grid::gpar(
-      col = text_col,
-      fontsize = text_size,
-      fontfamily = text_font,
+      col = txt_col,
+      fontsize = txt_size,
+      fontfamily = txt_font,
       lineheight = 0.75
     )
-  )
-}
-
-.engrob_img <- function(
-    img_object,
-    img_x,
-    img_y,
-    img_width,
-    img_height
-) {
-  grid::rasterGrob(
-    img_object,
-    x = grid::unit(img_x, "npc"),
-    y = grid::unit(img_y, "npc"),
-    width = grid::unit(img_width, "npc"),
-    height = grid::unit(img_height, "npc")
   )
 }

@@ -10,13 +10,13 @@ make_hex(
   border_width = 0.95,
   border_col = "blue",
   bg_col = "grey80",
-  text_string = "example",
-  text_x = 0.5,
-  text_y = 0.5,
-  text_angle = 0,
-  text_size = 20,
-  text_col = "red",
-  text_font = "mono",
+  txt_string = "example\\ntext",
+  txt_x = 0.5,
+  txt_y = 0.5,
+  txt_angle = 30,
+  txt_size = 20,
+  txt_col = "red",
+  txt_font = "mono",
   img_object = NULL,
   img_x = 0.5,
   img_y = 0.5,
@@ -40,20 +40,21 @@ border around the hex.}
 \item{bg_col}{Character. Named R colour or hexadecimal code for the interior
 background.}
 
-\item{text_string}{Character. Text to display. Use an empty character string
-if you don't want to place text.}
+\item{txt_string}{Character. Text to display. \code{NULL} (or an empty string) if
+you don't want to place text.}
 
-\item{text_x}{Numeric. Text location x-axis.}
+\item{txt_x}{Numeric. Text location x-axis.}
 
-\item{text_y}{Numeric. Text location y-axis.}
+\item{txt_y}{Numeric. Text location y-axis.}
 
-\item{text_angle}{Numeric. Rotation of text string in degrees.}
+\item{txt_angle}{Numeric. Rotation of text string in degrees. Positive values
+will rotate anticlockwise by the given angle.}
 
-\item{text_size}{Numeric. Text point-size.}
+\item{txt_size}{Numeric. Text point-size.}
 
-\item{text_col}{Character. Text colour. A named R colour or hexadecimal code.}
+\item{txt_col}{Character. Text colour. A named R colour or hexadecimal code.}
 
-\item{text_font}{Character. Name of a font family available on your system.}
+\item{txt_font}{Character. Name of a font family available on your system.}
 
 \item{img_object}{Array. A PNG file read in by the user. \code{NULL} for no image.}
 
@@ -68,7 +69,7 @@ if you don't want to place text.}
 \item{img_angle}{Numeric. Text rotation in degrees.}
 }
 \value{
-None.
+Nothing.
 }
 \description{
 Generate a simple hexagon-shaped sticker design with a border, image and
@@ -88,11 +89,9 @@ Any elements falling outside of the hexagon will be clipped out.
 
 Coordinates should be provided as native units ('Normalised Parent
 Coordinates'), which means that the x- and y-axes range from 0 to 1 with the
-centre at x = 0.5 and y = 0.5. Coordinates x and y are relative to the angle
-of the element. Coordindates x and y relate to the centre of the image or
-text to which they apply.
+centre at x = 0.5 and y = 0.5.
 
-This applies to arguments \code{text_x}, \code{text_y}, \code{img_x}, \code{img_y}, \code{img_width}
+This applies to arguments \code{txt_x}, \code{txt_y}, \code{img_x}, \code{img_y}, \code{img_width}
 and \code{img_height}.
 }
 
@@ -102,7 +101,7 @@ Named colour values must be listed in \code{\link[grDevices:colors]{grDevices::c
 colour values must be provided with length 6 or 8 and must begin with an
 octothorpe (\verb{#}).
 
-This applies to arguments \code{border_col}, \code{bg_col} and \code{text_col}.
+This applies to arguments \code{border_col}, \code{bg_col} and \code{txt_col}.
 }
 
 \subsection{Write order}{

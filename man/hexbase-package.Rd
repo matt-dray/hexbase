@@ -4,9 +4,11 @@
 \name{hexbase-package}
 \alias{hexbase}
 \alias{hexbase-package}
-\title{hexbase: Simple Dependency-Free Hex Logos}
+\title{hexbase: Create Simple Dependency-Free Hex Logos}
 \description{
-A simple, dependency-free way to create hexagon-shaped logos to help promote your R package or other projects.
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
+A simple interface to create hexagon-shaped logos that help promote your R package or other projects. Uses only base R.
 }
 \seealso{
 Useful links:

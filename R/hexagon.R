@@ -12,14 +12,15 @@
 #'     border around the hex.
 #' @param bg_col Character. Named R colour or hexadecimal code for the interior
 #'     background.
-#' @param text_string Character. Text to display. Use an empty character string
-#'     if you don't want to place text.
-#' @param text_x Numeric. Text location x-axis.
-#' @param text_y Numeric. Text location y-axis.
-#' @param text_angle Numeric. Rotation of text string in degrees.
-#' @param text_size Numeric. Text point-size.
-#' @param text_col Character. Text colour. A named R colour or hexadecimal code.
-#' @param text_font Character. Name of a font family available on your system.
+#' @param txt_string Character. Text to display. `NULL` (or an empty string) if
+#'    you don't want to place text.
+#' @param txt_x Numeric. Text location x-axis.
+#' @param txt_y Numeric. Text location y-axis.
+#' @param txt_angle Numeric. Rotation of text string in degrees. Positive values
+#'     will rotate anticlockwise by the given angle.
+#' @param txt_size Numeric. Text point-size.
+#' @param txt_col Character. Text colour. A named R colour or hexadecimal code.
+#' @param txt_font Character. Name of a font family available on your system.
 #' @param img_object Array. A PNG file read in by the user. `NULL` for no image.
 #' @param img_x Numeric. Image location x-axis.
 #' @param img_y Numeric. Image location y-axis.
@@ -41,11 +42,9 @@
 #'
 #' Coordinates should be provided as native units ('Normalised Parent
 #' Coordinates'), which means that the x- and y-axes range from 0 to 1 with the
-#' centre at x = 0.5 and y = 0.5. Coordinates x and y are relative to the angle
-#' of the element. Coordindates x and y relate to the centre of the image or
-#' text to which they apply.
+#' centre at x = 0.5 and y = 0.5.
 #'
-#' This applies to arguments `text_x`, `text_y`, `img_x`, `img_y`, `img_width`
+#' This applies to arguments `txt_x`, `txt_y`, `img_x`, `img_y`, `img_width`
 #' and `img_height`.
 #'
 #' ## Colours
@@ -54,7 +53,7 @@
 #' colour values must be provided with length 6 or 8 and must begin with an
 #' octothorpe (`#`).
 #'
-#' This applies to arguments `border_col`, `bg_col` and `text_col`.
+#' This applies to arguments `border_col`, `bg_col` and `txt_col`.
 #'
 #' ## Write order
 #'
@@ -67,7 +66,7 @@
 #' 4. Add text.
 #' 5. Clip to outer hexagon.
 #'
-#' @return None.
+#' @return Nothing.
 #'
 #' @export
 #'
@@ -80,13 +79,13 @@ make_hex <- function(
     border_width = 0.95,
     border_col = "blue",
     bg_col = "grey80",
-    text_string = "example",
-    text_x = 0.5,
-    text_y = 0.5,
-    text_angle = 0,
-    text_size = 20,
-    text_col = "red",
-    text_font = "mono",
+    txt_string = "example\ntext",
+    txt_x = 0.5,
+    txt_y = 0.5,
+    txt_angle = 30,
+    txt_size = 20,
+    txt_col = "red",
+    txt_font = "mono",
     img_object = NULL,
     img_x = 0.5,
     img_y = 0.5,
@@ -112,45 +111,42 @@ make_hex <- function(
   coords_inner_scaled <- .get_inner_hex_coords_scaled(coords_inner, coords_outer)
   grob_inner <- .engrob_hex(coords_inner_scaled, bg_col)
 
-  grob_text  <- .engrob_text(
-    text_string,
-    text_x,
-    text_y,
-    text_col,
-    text_size,
-    text_font
-  )
-
   if (!is.null(img_object)) {
-    grob_img <- .engrob_img(
-      img_object,
-      img_x,
-      img_y,
-      img_width,
-      img_height
-    )
+    grob_img <- grid::rasterGrob(img_object, width = img_width, height = img_height)
   }
 
-  viewport_clip <- grid::viewport(clip = grob_outer)
-  grid::pushViewport(viewport_clip)
+  if (!is.null(txt_string)) {
+    grob_txt <- .engrob_text(txt_string, txt_col, txt_size, txt_font)
+  }
+
+  vp_clip <- grid::viewport(clip = grob_outer)
+  grid::pushViewport(vp_clip)
 
   for (grob in list(grob_outer, grob_inner)) {
-    viewport_hex <- grid::viewport(gp = grid::gpar(lwd = 0))
-    grid::pushViewport(viewport_hex)
+    vp_hex <- grid::viewport(gp = grid::gpar(lwd = 0))
+    grid::pushViewport(vp_hex)
     grid::grid.draw(grob)
   }
 
   if (!is.null(img_object)) {
-    viewport_img <- grid::viewport(angle = img_angle)
-    grid::pushViewport(viewport_img)
+    vp_img_parent <- grid::viewport(x = img_x, y = img_y)
+    grid::pushViewport(vp_img_parent)
+    vp_img <- grid::viewport(angle = img_angle)
+    grid::pushViewport(vp_img)
     grid::grid.draw(grob_img)
+    grid::popViewport()
     grid::popViewport()
   }
 
-  viewport_text <- grid::viewport(angle = text_angle)
-  grid::pushViewport(viewport_text)
-  grid::grid.draw(grob_text)
-  grid::popViewport()
+  if (!is.null(txt_string)) {
+    vp_txt_parent <- grid::viewport(x = txt_x, y = txt_y)
+    grid::pushViewport(vp_txt_parent)
+    vp_txt <- grid::viewport(angle = txt_angle)
+    grid::pushViewport(vp_txt)
+    grid::grid.draw(grob_txt)
+    grid::popViewport()
+    grid::popViewport()
+  }
 
   grid::popViewport()  # clip
 
