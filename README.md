@@ -1,23 +1,19 @@
 
-# {hexbase} <a href="https://github.com/matt-dray/hexbase"><img src="man/figures/logo.png" align="right" height="139" alt='A hexagon sticker logo for the package hexbase. It has a darkblue hexagon with a grey border. There is an a white hexagon with a thick grey border inside. In the centre is darkblue text saying hexbase.'/></a>
+# {hexbase}
 
 <!-- badges: start -->
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Concept – Minimal or no implementation has been done yet, or the repository is only intended to be a limited example, demo, or proof-of-concept.](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
 [![R-CMD-check](https://github.com/matt-dray/hexbase/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/matt-dray/hexbase/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/matt-dray/hexbase/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/matt-dray/hexbase/actions/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
 ## What
 
-A dependency-free R package to help create simple hexagon-shaped sticker logos.
+A dependency-free R package to help create simple hexagon-shaped sticker logos with the dimensions of [the Stickers Standard](https://sticker.how/#type-hexagon).
 
-The package's only function, `make_hex()`, is intentionally limited and opinionated. For now, you can only:
-
-* adjust the width and colour of the border
-* colour the background
-* add text and adjust its location, rotation, size, colour and font family
-* provide an image from file and adjust its location, size and rotation
-* save to PNG with the dimensions of [the Stickers Standard](https://sticker.how/#type-hexagon)
+This a concept package that may be unstable.
+It has little testing across systems.
+[Please contribute](https://github.com/matt-dray/hexbase/issues) if you have ideas or want to fix my code.
 
 ## Install
 
@@ -28,44 +24,73 @@ install.packages("remotes")  # if not yet installed
 remotes::install_github("matt-dray/hexbase")
 ```
 
+The package only uses {grid} and {grDevices} from base R. 
+Otherwise it's BYOIAF ('bring your own images and fonts').
+
 ## Example
 
-The hex logo for {hexbase} was made using {hexbase} (so meta).
-You can see it at the top of this README.
-It's composed of two main elements: an image (a grey-bordered white hexagon) read from a PNG file overlaid with some text ('hexbase').
+Build a sticker additively with a series of function calls:
 
-You can make this hex using the `make_hex()` function.
-The output is saved to a PNG at the `file_path` location.
+1. `open_device()` to set up a PNG graphics device with the dimensions of [the Stickers Standard](https://sticker.how/#type-hexagon).
+1. `add_hex()` to add the hexagon and border.
+1. `add_image()` to place an image (run multiple times for more images).
+1. `add_text()` to place and style text (run multiple times for more text).
+1. `close_device()` to close the PNG graphics device and save to file.
+
+You can set various text and image properties like position, size, colour and angle.
+Text and images will be clipped if they exceed the boundary of the hexagon.
+
+Below is an extremely basic example.
+Note how you call each function independently (i.e. no pipes), much like writing base plots.
 
 ``` r
-# Create temporary PNG file where hex will be written
-temp_path <- tempfile(fileext = ".png")
-
-# Read an image file to use as an element in the hex
-image_path <- system.file("images", "hexagon.png", package = "hexbase")
+# Bring your own image
+image_path <- system.file("img", "Rlogo.png", package = "png")
 image_png <- png::readPNG(image_path)
 
-# Generate the hex with border, background, text and image elements
-hexbase::make_hex(
-  file_path = temp_path,
-  file_open = TRUE,  # open the file after being written
-  border_col = "grey",  # named colour or hexadecimal
-  bg_col = "darkblue",
-  txt_string = "hex\nbase",  # includes linebreak
-  txt_x = 0.5,
-  txt_y = 0.5,
-  txt_angle = 30,
-  txt_size = 18,
-  txt_col = "darkblue",
-  txt_font = "Routed Gothic Wide",  # downloaded via webonastick.com/fonts/routed-gothic/
-  img_object = image_png,
-  img_x = 0.5,
-  img_y = 0.5,
-  img_width = 0.7,
-  img_height = 0.7,
-  img_angle = 30
+# Somewhere to save it
+temp_path <- tempfile(fileext = ".png")
+
+# Build up and write the sticker
+hexbase::open_device(file_path = temp_path)
+hexbase::add_hex(
+  border_col = "grey20",
+  bg_col = "#BEBEBE"
 )
+hexbase::add_image(
+  image_object = image_png,
+  image_y = 0.6,
+  image_angle = 20,
+  image_width = 0.5
+)
+hexbase::add_text(
+  text_string = "example",
+  text_y = 0.35,
+  text_col = "red",
+  text_family = "mono",
+  text_face = "bold.italic"
+)
+hexbase::add_text(
+  text_string = "visit https://rstats.lol/ ftw",
+  text_x = 0.73, 
+  text_y = 0.17,
+  text_angle = 30, 
+  text_size = 6, 
+  text_col = "blue", 
+  text_family = "serif"
+)
+hexbase::close_device()
+
+# Optionally, open the image for inspection
+system(paste("open", temp_path))
 ```
+
+That creates this absolutely stunning sticker, written to the specified `file_path`:
+
+<img src='man/figures/readme-hex.png' width='300' alt="A grey hexagon with a thin black border. An R logo is shown just above centre. Just below centre is the text 'example' in monospace red and bold font. On the lower right edge is the URL 'htps://rstats.lol' in smaller, blue italic serif font.">
+
+Note that you can't rely on plot-window previews when you're developing your sticker (they lie).
+You must inspect the generated PNG file instead.
 
 ## Related
 
