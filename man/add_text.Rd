@@ -7,7 +7,7 @@
 add_text(
   text_string = "example",
   text_x = 0.5,
-  text_y = 0.3,
+  text_y = 0.4,
   text_angle = 0,
   text_size = 20,
   text_col = "black",
@@ -39,8 +39,8 @@ values will rotate anticlockwise by the given angle.}
 }
 \description{
 Overlay text on the hexagon. Text outside the hexagon will be clipped. Should
-be called after \link{open_device} and \link{add_hex}, in that order. Call this function
-separately for each text item that you want to add.
+be called after \link{open_device} and \link{add_hex}, in that order. Call this
+function separately for each text item that you want to add.
 }
 \details{
 \subsection{Coordinates}{
@@ -64,5 +64,6 @@ image_path <- system.file("img", "Rlogo.png", package = "png")
 image_png <- png::readPNG(image_path)
 add_image(image_png)
 add_text()
+add_border()
 close_device()
 }

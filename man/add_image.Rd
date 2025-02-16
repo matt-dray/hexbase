@@ -47,5 +47,6 @@ image_path <- system.file("img", "Rlogo.png", package = "png")
 image_png <- png::readPNG(image_path)
 add_image(image_png)
 add_text()
+add_border()
 close_device()
 }

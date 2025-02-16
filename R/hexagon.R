@@ -19,6 +19,7 @@
 #' image_png <- png::readPNG(image_path)
 #' add_image(image_png)
 #' add_text()
+#' add_border()
 #' close_device()
 open_device <- function(file_path) {
 
@@ -41,15 +42,10 @@ open_device <- function(file_path) {
 
 }
 
-#' Add a Hexagon with a Border
+#' Add a Hexagon
 #'
-#' Add two hexagons, where the exposed region between the two creates a border.
+#' Add a hexagon 'canvas' to which elements can be added.
 #'
-#' @param border_width Numeric. Thickness of the border, expressed as the
-#'     inverse ratio of the 'inner' hexagon to 'outer' hexagon (must be between
-#'     `0` and `1`).
-#' @param border_col Character. Named R colour or hexadecimal code for the
-#'     border around the hex.
 #' @param bg_col Character. Named R colour or hexadecimal code for the interior
 #'     background.
 #'
@@ -73,23 +69,87 @@ open_device <- function(file_path) {
 #' image_png <- png::readPNG(image_path)
 #' add_image(image_png)
 #' add_text()
+#' add_border()
 #' close_device()
-add_hex <- function(
+add_hex <- function(bg_col = "grey") {
+
+  if (!(bg_col %in% grDevices::colours() | grepl("^#[0-9A-Fa-f]{6,8}$", bg_col))) {
+    stop("Argument 'bg_col' must a named R colour or a hex code.")
+  }
+
+  hex_coords_outer <- .get_hex_coords(diameter = 1)
+
+  x_scale <- c(min(hex_coords_outer[["x"]]), max(hex_coords_outer[["x"]]))
+  y_scale <- c(min(hex_coords_outer[["y"]]), max(hex_coords_outer[["y"]]))
+
+  grid::pushViewport(grid::viewport(xscale = x_scale, yscale = y_scale))
+
+  hex_grob_outer <- grid::polygonGrob(
+    hex_coords_outer[["x"]],
+    hex_coords_outer[["y"]],
+    gp = grid::gpar(lwd = 0, fill = bg_col),
+    default.units = "native"
+  )
+
+  # Remove anything outside the outer hex boundary
+  grid::pushViewport(
+    grid::viewport(
+      xscale = x_scale,
+      yscale = y_scale,
+      clip = hex_grob_outer
+    )
+  )
+
+  grid::grid.draw(hex_grob_outer)
+
+}
+
+#' Add a Border to the Edge of the Hexagon
+#'
+#' Add a border of certain thickness and colour to the hexagon. Should
+#' be called after [open_device] and [add_hex], in that order. If desired, make
+#' this the last function before [close_device] so that the border overlays all
+#' other elements.
+#'
+#' @param border_width Numeric. Thickness of the border, expressed as the
+#'     inverse ratio of the interior of the hex to the full extent of the hex
+#'     (must be between `0` and `1`).
+#' @param border_col Character. Named R colour or hexadecimal code for the
+#'     border around the hex.
+#'
+#' @details
+#'
+#' ## Colours
+#'
+#' Named colour values must be listed in [grDevices::colours()]. Hexadecimal
+#' colour values must be provided with length 6 or 8 and must begin with an
+#' octothorpe (`#`).
+#'
+#' @returns `NULL`. Adds to an existing graphics device.
+#'
+#' @export
+#'
+#' @examples
+#' temp_path <- tempfile(fileext = ".png")
+#' open_device(temp_path)
+#' add_hex()
+#' image_path <- system.file("img", "Rlogo.png", package = "png")
+#' image_png <- png::readPNG(image_path)
+#' add_image(image_png)
+#' add_text()
+#' add_border()
+#' close_device()
+add_border <- function(
     border_width = 0.05,
-    border_col = "black",
-    bg_col = "grey"
+    border_col = "black"
 ) {
 
   if (!inherits(border_width, "numeric") || border_width >= 1) {
     stop("Argument 'border_width' must be a numeric value below 1.")
   }
 
-  if (!(border_col %in% grDevices::colours() | grepl("^#[0-9A-Fa-f]{6}$", border_col))) {
+  if (!(border_col %in% grDevices::colours() | grepl("^#[0-9A-Fa-f]{6,8}$", border_col))) {
     stop("Argument 'border_col' must a named R colour or a hex code.")
-  }
-
-  if (!(bg_col %in% grDevices::colours() | grepl("^#[0-9A-Fa-f]{6}$", bg_col))) {
-    stop("Argument 'bg_col' must a named R colour or a hex code.")
   }
 
   hex_diameter_inner <- 1 - border_width
@@ -105,51 +165,32 @@ add_hex <- function(
   hex_grob_outer <- grid::polygonGrob(
     hex_coords_outer[["x"]],
     hex_coords_outer[["y"]],
-    gp = grid::gpar(lwd = 0, fill = border_col),
     default.units = "native"
   )
-  grid::pushViewport(
-    grid::viewport(
-      xscale = x_scale,
-      yscale = y_scale,
-      clip = hex_grob_outer
-    )
+
+  # Inner hexagon will be clipped from outer, leaving a border polygon
+  hex_grob_inner <- grid::polygonGrob(
+    hex_coords_inner[["x"]],
+    hex_coords_inner[["y"]],
+    default.units = "native"
   )
 
-  grid::grid.draw(hex_grob_outer)
-
-  grid::grid.polygon(
-    x = hex_coords_inner[["x"]],
-    y = hex_coords_inner[["y"]],
-    default.units = "native",
-    gp = grid::gpar(lwd = 0, fill = bg_col)
+  border_grob <- gridGeometry::polyclipGrob(
+    A = hex_grob_outer,
+    B = hex_grob_inner,
+    op = "minus",  # removes inner from outer
+    gp = grid::gpar(lwd = 0, fill = border_col)
   )
 
-}
-
-#' Get Coordinates of Hexagon Vertices
-#' @param diameter Numeric.
-#' @returns A list of two numeric vectors that represent points of a hexagon.
-#'     The elements are named 'x' and 'y'.
-#' @noRd
-.get_hex_coords <- function(diameter = 1) {
-
-  radius <- diameter / 2
-  centre <- 0.5
-  angles <- seq(0, 2 * pi, length.out = 7)
-
-  list(
-    x = centre + radius * cos(angles - pi / 6),
-    y = centre + radius * sin(angles - pi / 6)
-  )
+  grid::grid.draw(border_grob)
 
 }
 
 #' Add Text
 #'
 #' Overlay text on the hexagon. Text outside the hexagon will be clipped. Should
-#' be called after [open_device] and [add_hex], in that order. Call this function
-#' separately for each text item that you want to add.
+#' be called after [open_device] and [add_hex], in that order. Call this
+#' function separately for each text item that you want to add.
 #'
 #' @param text_string Character. Text to display. `NULL` (or an empty string) if
 #'    you don't want to place text.
@@ -187,11 +228,12 @@ add_hex <- function(
 #' image_png <- png::readPNG(image_path)
 #' add_image(image_png)
 #' add_text()
+#' add_border()
 #' close_device()
 add_text <- function(
     text_string = "example",
     text_x = 0.5,
-    text_y = 0.3,
+    text_y = 0.4,
     text_angle = 0,
     text_size = 20,
     text_col = "black",
@@ -215,7 +257,7 @@ add_text <- function(
     stop("Argument 'text_size' must be a numeric value.")
   }
 
-  if (!(text_col %in% grDevices::colours() | grepl("^#[0-9A-Fa-f]{6}$", text_col))) {
+  if (!(text_col %in% grDevices::colours() | grepl("^#[0-9A-Fa-f]{6,8}$", text_col))) {
     stop("Argument 'text_col' must a named R colour or a hex code.")
   }
 
@@ -283,6 +325,7 @@ add_text <- function(
 #' image_png <- png::readPNG(image_path)
 #' add_image(image_png)
 #' add_text()
+#' add_border()
 #' close_device()
 add_image <- function(
     image_object,
@@ -336,8 +379,27 @@ add_image <- function(
 #' image_png <- png::readPNG(image_path)
 #' add_image(image_png)
 #' add_text()
+#' add_border()
 #' close_device()
 close_device <- function() {
   grid::popViewport(0)  # clip to outer hexagon
   grDevices::dev.off()
+}
+
+#' Get Coordinates of Hexagon Vertices
+#' @param diameter Numeric.
+#' @returns A list of two numeric vectors that represent points of a hexagon.
+#'     The elements are named 'x' and 'y'.
+#' @noRd
+.get_hex_coords <- function(diameter = 1) {
+
+  radius <- diameter / 2
+  centre <- 0.5
+  angles <- seq(0, 2 * pi, length.out = 7)
+
+  list(
+    x = centre + radius * cos(angles - pi / 6),
+    y = centre + radius * sin(angles - pi / 6)
+  )
+
 }

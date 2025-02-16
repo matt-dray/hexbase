@@ -32,9 +32,10 @@ Otherwise it's BYOIAF ('bring your own images and fonts').
 Build a sticker additively with a series of function calls:
 
 1. `open_device()` to set up a PNG graphics device with the dimensions of [the Stickers Standard](https://sticker.how/#type-hexagon).
-1. `add_hex()` to add the hexagon and border.
+1. `add_hex()` to add the hexagon canvas.
 1. `add_image()` to place an image (run multiple times for more images).
 1. `add_text()` to place and style text (run multiple times for more text).
+1. `add_border()` to put a border around the edge of the hex (add this after images and text to overlay them).
 1. `close_device()` to close the PNG graphics device and save to file.
 
 You can set various text and image properties like position, size, colour and angle.
@@ -53,10 +54,7 @@ temp_path <- tempfile(fileext = ".png")
 
 # Build up and write the sticker
 hexbase::open_device(file_path = temp_path)
-hexbase::add_hex(
-  border_col = "grey20",
-  bg_col = "#BEBEBE"
-)
+hexbase::add_hex(bg_col = "#BEBEBE")
 hexbase::add_image(
   image_object = image_png,
   image_y = 0.6,
@@ -79,6 +77,7 @@ hexbase::add_text(
   text_col = "blue", 
   text_family = "serif"
 )
+hexbase::add_border(border_col = "grey20",)
 hexbase::close_device()
 
 # Optionally, open the image for inspection

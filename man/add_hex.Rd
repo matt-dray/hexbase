@@ -2,18 +2,11 @@
 % Please edit documentation in R/hexagon.R
 \name{add_hex}
 \alias{add_hex}
-\title{Add a Hexagon with a Border}
+\title{Add a Hexagon}
 \usage{
-add_hex(border_width = 0.05, border_col = "black", bg_col = "grey")
+add_hex(bg_col = "grey")
 }
 \arguments{
-\item{border_width}{Numeric. Thickness of the border, expressed as the
-inverse ratio of the 'inner' hexagon to 'outer' hexagon (must be between
-\code{0} and \code{1}).}
-
-\item{border_col}{Character. Named R colour or hexadecimal code for the
-border around the hex.}
-
 \item{bg_col}{Character. Named R colour or hexadecimal code for the interior
 background.}
 }
@@ -21,7 +14,7 @@ background.}
 \code{NULL}. Adds to an existing graphics device.
 }
 \description{
-Add two hexagons, where the exposed region between the two creates a border.
+Add a hexagon 'canvas' to which elements can be added.
 }
 \details{
 \subsection{Colours}{
@@ -39,5 +32,6 @@ image_path <- system.file("img", "Rlogo.png", package = "png")
 image_png <- png::readPNG(image_path)
 add_image(image_png)
 add_text()
+add_border()
 close_device()
 }
