@@ -10,7 +10,8 @@ URL: https://github.com/matt-dray/hexbase
 BugReports: https://github.com/matt-dray/hexbase/bugs
 Imports: 
     grDevices,
-    grid
+    grid,
+    gridGeometry
 Suggests: 
     png
 Config/testthat/edition: 3

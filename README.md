@@ -9,7 +9,7 @@
 
 ## What
 
-A dependency-free R package to help create simple hexagon-shaped sticker logos with the dimensions of [the Stickers Standard](https://sticker.how/#type-hexagon).
+A dependency-light R package to help create simple hexagon-shaped sticker logos with the dimensions of [the Stickers Standard](https://sticker.how/#type-hexagon).
 
 This a concept package that may be unstable.
 It has little testing across systems.
@@ -24,7 +24,8 @@ install.packages("remotes")  # if not yet installed
 remotes::install_github("matt-dray/hexbase")
 ```
 
-The package only uses {grid} and {grDevices} from base R. 
+The package uses the inbuilt {grid} graphics system and the sister package [{gridGeometry}](https://cran.r-project.org/package=gridGeometry).
+The package may include more 'gridverse' packages in future.
 Otherwise it's BYOIAF ('bring your own images and fonts').
 
 ## Example
@@ -32,10 +33,10 @@ Otherwise it's BYOIAF ('bring your own images and fonts').
 Build a sticker additively with a series of function calls:
 
 1. `open_device()` to set up a PNG graphics device with the dimensions of [the Stickers Standard](https://sticker.how/#type-hexagon).
-1. `add_hex()` to add the hexagon canvas.
+1. `add_hex()` to add the underlying hexagon 'canvas'.
 1. `add_image()` to place an image (run multiple times for more images).
 1. `add_text()` to place and style text (run multiple times for more text).
-1. `add_border()` to put a border around the edge of the hex (add this after images and text to overlay them).
+1. `add_border()` to put a border around the edge of the hex (add this after images and text to draw over the top of them).
 1. `close_device()` to close the PNG graphics device and save to file.
 
 You can set various text and image properties like position, size, colour and angle.
@@ -77,7 +78,7 @@ hexbase::add_text(
   text_col = "blue", 
   text_family = "serif"
 )
-hexbase::add_border(border_col = "grey20",)
+hexbase::add_border(border_col = "grey20")
 hexbase::close_device()
 
 # Optionally, open the image for inspection
@@ -86,7 +87,7 @@ system(paste("open", temp_path))
 
 That creates this absolutely stunning sticker, written to the specified `file_path`:
 
-<img src='man/figures/readme-hex.png' width='300' alt="A grey hexagon with a thin black border. An R logo is shown just above centre. Just below centre is the text 'example' in monospace red and bold font. On the lower right edge is the URL 'htps://rstats.lol' in smaller, blue italic serif font.">
+<img src='man/figures/readme-hex.png' width='300' alt="A grey hexagon with a dark grey border. An R logo is shown just above centre and angled at 30 degrees. Just below centre is the text 'example' in monospace red and bold font. On the lower right edge is the URL 'htps://rstats.lol' in smaller, blue italic serif font.">
 
 Note that you can't rely on plot-window previews when you're developing your sticker (they lie).
 You must inspect the generated PNG file instead.
