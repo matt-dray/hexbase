@@ -1,3 +1,6 @@
+library("tinytest")
+using("tinysnapshot")
+
 # Open device -------------------------------------------------------------
 
 temp_path <- tempfile(fileext = ".png")
@@ -23,6 +26,16 @@ expect_error(open_device("x/y/z.png", err_dir))
 hex <- add_hex()
 expect_null(hex)
 
+tinysnapshot::expect_snapshot_plot(
+  function() add_hex(),
+  label = "add-hex"
+)
+
+tinysnapshot::expect_snapshot_plot(
+  function() add_hex(col = "red"),
+  label = "add-hex-args"
+)
+
 temp_path <- tempfile(fileext = ".png")
 open_device(temp_path)
 add_hex()
@@ -37,11 +50,31 @@ expect_error(add_hex("#0011"), err_col)
 expect_error(add_hex("#0011223344"), err_col)
 expect_error(add_hex("001122"), err_col)
 
-
 # Add text ----------------------------------------------------------------
 
 txt <- add_text()
 expect_null(txt)
+
+tinysnapshot::expect_snapshot_plot(
+  function() add_text(),
+  label = "add-text"
+)
+
+tinysnapshot::expect_snapshot_plot(
+  function() {
+    add_text(
+      string = "test",
+      x = 0.4,
+      y = 0.6,
+      angle = 30,
+      size = 25,
+      col = "red",
+      family = "mono",
+      face = "bold"
+    )
+  },
+  label = "add-text-args"
+)
 
 temp_path <- tempfile(fileext = ".png")
 open_device(temp_path)
@@ -94,6 +127,24 @@ img_png <- png::readPNG(img_path)
 img <- add_image(img_png)
 expect_null(img)
 
+tinysnapshot::expect_snapshot_plot(
+  function() add_image(img_png),
+  label = "add-image"
+)
+
+tinysnapshot::expect_snapshot_plot(
+  function() {
+    add_image(
+      img = img_png,
+      x = 0.6,
+      y = 0.4,
+      angle = 30,
+      width = 0.5
+    )
+  },
+  label = "add-image-args"
+)
+
 temp_path <- tempfile(fileext = ".png")
 open_device(temp_path)
 add_hex()
@@ -120,6 +171,16 @@ expect_error(add_image(img_png, width = "x"), err_width)
 
 border <- add_border()
 expect_null(border)
+
+tinysnapshot::expect_snapshot_plot(
+  function() add_border(),
+  label = "add-border"
+)
+
+tinysnapshot::expect_snapshot_plot(
+  function() add_border(width = 0.1, col = "red"),
+  label = "add-border-args"
+)
 
 temp_path <- tempfile(fileext = ".png")
 open_device(temp_path)
