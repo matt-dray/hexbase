@@ -2,47 +2,53 @@
 % Please edit documentation in R/hexagon.R
 \name{add_text}
 \alias{add_text}
-\title{Add Text}
+\title{Add Text to the Hexagon}
 \usage{
 add_text(
-  text_string = "example",
-  text_x = 0.5,
-  text_y = 0.4,
-  text_angle = 0,
-  text_size = 20,
-  text_col = "black",
-  text_family = "sans",
-  text_face = c("plain", "bold", "italic", "bold.italic")
+  string = "example",
+  x = 0.5,
+  y = 0.4,
+  angle = 0,
+  size = 20,
+  col = "black",
+  family = "sans",
+  face = c("plain", "bold", "italic", "bold.italic")
 )
 }
 \arguments{
-\item{text_string}{Character. Text to display. \code{NULL} (or an empty string) if
+\item{string}{Character. Text to display. \code{NULL} (or an empty string) if
 you don't want to place text.}
 
-\item{text_x}{Numeric. Text location x-axis.}
+\item{x}{Numeric. Text location on the hexagon's x-axis.}
 
-\item{text_y}{Numeric. Text location y-axis.}
+\item{y}{Numeric. Text location on the hexagon's y-axis.}
 
-\item{text_angle}{Numeric. Rotation of text string in degrees. Positive
+\item{angle}{Numeric. Rotation of text string in degrees. Positive
 values will rotate anticlockwise by the given angle.}
 
-\item{text_size}{Numeric. Text point-size.}
+\item{size}{Numeric. Text point-size.}
 
-\item{text_col}{Character. Text colour. A named R colour or hexadecimal code.}
+\item{col}{Character. Text colour. A named R colour or hexadecimal code.}
 
-\item{text_family}{Character. Name of a font family available on your system.}
+\item{family}{Character. Name of a font family available on your system.}
 
-\item{text_face}{Character. Font face for the text.}
+\item{face}{Character. Font face for the text.}
 }
 \value{
 \code{NULL}. Adds to an existing graphics device.
 }
 \description{
-Overlay text on the hexagon. Text outside the hexagon will be clipped. Should
-be called after \link{open_device} and \link{add_hex}, in that order. Call this
-function separately for each text item that you want to add.
+Overlay text on the hexagon. Call this function separately for each string
+you want to add.
 }
 \details{
+\subsection{Order}{
+
+When building a hex, this function should be called after \link{open_device} and
+\link{add_hex}. You can then use further calls to \link{add_text}, \link{add_image} and
+\link{add_border} (if desired) and finally \link{close_device}.
+}
+
 \subsection{Coordinates}{
 
 Coordinates should be provided within the x- and y-axis ranges, which are
@@ -60,9 +66,9 @@ octothorpe (\verb{#}).
 temp_path <- tempfile(fileext = ".png")
 open_device(temp_path)
 add_hex()
-image_path <- system.file("img", "Rlogo.png", package = "png")
-image_png <- png::readPNG(image_path)
-add_image(image_png)
+img_path <- system.file("img", "Rlogo.png", package = "png")
+img_png <- png::readPNG(img_path)
+add_image(img_png)
 add_text()
 add_border()
 close_device()

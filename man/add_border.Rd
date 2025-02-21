@@ -4,26 +4,30 @@
 \alias{add_border}
 \title{Add a Border to the Edge of the Hexagon}
 \usage{
-add_border(border_width = 0.05, border_col = "black")
+add_border(width = 0.05, col = "black")
 }
 \arguments{
-\item{border_width}{Numeric. Thickness of the border, expressed as the
+\item{width}{Numeric. Thickness of the border, expressed as the
 inverse ratio of the interior of the hex to the full extent of the hex
 (must be between \code{0} and \code{1}).}
 
-\item{border_col}{Character. Named R colour or hexadecimal code for the
+\item{col}{Character. Named R colour or hexadecimal code for the
 border around the hex.}
 }
 \value{
 \code{NULL}. Adds to an existing graphics device.
 }
 \description{
-Add a border of certain thickness and colour to the hexagon. Should
-be called after \link{open_device} and \link{add_hex}, in that order. If desired, make
-this the last function before \link{close_device} so that the border overlays all
-other elements.
+Add a border of given thickness and colour to the inner edges of hexagon.
 }
 \details{
+\subsection{Order}{
+
+When building a hex, this function should be called after \link{open_device},
+\link{add_hex} and any calls to \link{add_text} and \link{add_image} (in that order), and
+before \link{close_device}.
+}
+
 \subsection{Colours}{
 
 Named colour values must be listed in \code{\link[grDevices:colors]{grDevices::colours()}}. Hexadecimal
@@ -35,9 +39,9 @@ octothorpe (\verb{#}).
 temp_path <- tempfile(fileext = ".png")
 open_device(temp_path)
 add_hex()
-image_path <- system.file("img", "Rlogo.png", package = "png")
-image_png <- png::readPNG(image_path)
-add_image(image_png)
+img_path <- system.file("img", "Rlogo.png", package = "png")
+img_png <- png::readPNG(img_path)
+add_image(img_png)
 add_text()
 add_border()
 close_device()

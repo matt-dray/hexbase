@@ -55,30 +55,30 @@ temp_path <- tempfile(fileext = ".png")
 
 # Build up and write the sticker
 hexbase::open_device(file_path = temp_path)
-hexbase::add_hex(bg_col = "#BEBEBE")
+hexbase::add_hex(col = "#BEBEBE")
 hexbase::add_image(
-  image_object = image_png,
-  image_y = 0.6,
-  image_angle = 20,
-  image_width = 0.5
+  img = image_png,
+  y = 0.6,
+  angle = 20,
+  width = 0.5
 )
 hexbase::add_text(
-  text_string = "example",
-  text_y = 0.35,
-  text_col = "red",
-  text_family = "mono",
-  text_face = "bold.italic"
+  string = "example",
+  y = 0.35,
+  col = "red",
+  family = "mono",
+  face = "bold.italic"
 )
 hexbase::add_text(
-  text_string = "visit https://rstats.lol/ ftw",
-  text_x = 0.73, 
-  text_y = 0.17,
-  text_angle = 30, 
-  text_size = 6, 
-  text_col = "blue", 
-  text_family = "serif"
+  string = "visit https://rstats.lol/ ftw",
+  x = 0.73, 
+  y = 0.17,
+  angle = 30, 
+  size = 6, 
+  col = "blue", 
+  family = "serif"
 )
-hexbase::add_border(border_col = "grey20")
+hexbase::add_border(col = "grey20")
 hexbase::close_device()
 
 # Optionally, open the image for inspection

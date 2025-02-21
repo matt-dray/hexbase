@@ -4,10 +4,10 @@
 \alias{add_hex}
 \title{Add a Hexagon}
 \usage{
-add_hex(bg_col = "grey")
+add_hex(col = "grey")
 }
 \arguments{
-\item{bg_col}{Character. Named R colour or hexadecimal code for the interior
+\item{col}{Character. Named R colour or hexadecimal code for the interior
 background.}
 }
 \value{
@@ -17,6 +17,13 @@ background.}
 Add a hexagon 'canvas' to which elements can be added.
 }
 \details{
+\subsection{Order}{
+
+When building a hex, this function should be called after \link{open_device}. You can then use
+\link{add_text}, \link{add_image} and \link{add_border} (if desired) and finally
+\link{close_device}.
+}
+
 \subsection{Colours}{
 
 Named colour values must be listed in \code{\link[grDevices:colors]{grDevices::colours()}}. Hexadecimal
@@ -28,9 +35,9 @@ octothorpe (\verb{#}).
 temp_path <- tempfile(fileext = ".png")
 open_device(temp_path)
 add_hex()
-image_path <- system.file("img", "Rlogo.png", package = "png")
-image_png <- png::readPNG(image_path)
-add_image(image_png)
+img_path <- system.file("img", "Rlogo.png", package = "png")
+img_png <- png::readPNG(img_path)
+add_image(img_png)
 add_text()
 add_border()
 close_device()
