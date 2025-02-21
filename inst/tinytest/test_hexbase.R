@@ -1,5 +1,6 @@
 library("tinytest")
 using("tinysnapshot")
+options("tinysnapshot_device" = "svglite")
 
 # Open device -------------------------------------------------------------
 

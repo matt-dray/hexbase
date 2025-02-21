@@ -13,6 +13,7 @@ Imports:
     grid,
     gridGeometry
 Suggests: 
+    magick,
     png,
     rsvg,
     tinysnapshot,
