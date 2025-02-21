@@ -7,6 +7,9 @@
 add_image(img, x = 0.5, y = 0.7, angle = 0, width = 0.4)
 }
 \arguments{
+\item{img}{Array. A PNG or JPEG file read in by the user, most likely
+using packages 'png' or 'jpeg'.}
+
 \item{x}{Numeric. Image location on the hexagon's x-axis.}
 
 \item{y}{Numeric. Image location on the hexagon's y-axis.}
@@ -14,9 +17,6 @@ add_image(img, x = 0.5, y = 0.7, angle = 0, width = 0.4)
 \item{angle}{Numeric. Text rotation in degrees.}
 
 \item{width}{Numeric. Image width.}
-
-\item{object}{Array. A PNG or JPEG file read in by the user, most likely
-using packages 'png' or 'jpeg'.}
 }
 \value{
 \code{NULL}. Adds to an existing graphics device.

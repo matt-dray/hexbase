@@ -203,16 +203,16 @@ add_text <- function(
 
   if (!inherits(family, "character")) {
     stop(
-      "Argument 'family' must be a character string
-      representing an available font family.",
+      "Argument 'family' must be a character string representing ",
+      "an available font family.",
       call. = FALSE
     )
   }
 
   if (!inherits(face, "character")) {
     stop(
-      "Argument 'face' must be one of the following character strings:
-      'plain', 'bold', 'italic', 'bold.italic'.",
+      "Argument 'face' must be one of the following character strings: ",
+      "'plain', 'bold', 'italic', 'bold.italic'.",
       call. = FALSE
     )
   }
@@ -240,7 +240,7 @@ add_text <- function(
 #' Overlay an image on the hexagon. Call this function separately for each image
 #' you want to add.
 #'
-#' @param object Array. A PNG or JPEG file read in by the user, most likely
+#' @param img Array. A PNG or JPEG file read in by the user, most likely
 #'     using packages 'png' or 'jpeg'.
 #' @param x Numeric. Image location on the hexagon's x-axis.
 #' @param y Numeric. Image location on the hexagon's y-axis.
@@ -358,8 +358,11 @@ add_border <- function(
     col = "black"
 ) {
 
-  if (!inherits(width, "numeric") || width >= 1) {
-    stop("Argument 'width' must be a numeric value below 1.", call. = FALSE)
+  if (!inherits(width, "numeric") || (width < 0 | width > 1)) {
+    stop(
+      "Argument 'width' must be a numeric value between 0 and 1.",
+      call. = FALSE
+    )
   }
 
   if (!(col %in% grDevices::colours() | grepl("^#[0-9A-Fa-f]{6,8}$", col))) {
