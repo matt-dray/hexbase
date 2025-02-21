@@ -50,3 +50,8 @@ add_text()
 add_border()
 close_device()
 }
+\seealso{
+Other hex content adders: 
+\code{\link{add_text}()}
+}
+\concept{hex content adders}

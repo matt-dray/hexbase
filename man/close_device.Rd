@@ -33,3 +33,8 @@ add_text()
 add_border()
 close_device()
 }
+\seealso{
+Other hex device handlers: 
+\code{\link{open_device}()}
+}
+\concept{hex device handlers}

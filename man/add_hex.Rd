@@ -42,3 +42,8 @@ add_text()
 add_border()
 close_device()
 }
+\seealso{
+Other hex elements: 
+\code{\link{add_border}()}
+}
+\concept{hex elements}

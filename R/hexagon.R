@@ -17,6 +17,8 @@
 #'
 #' @returns Nothing. A graphics device is opened.
 #'
+#' @family hex device handlers
+#'
 #' @export
 #'
 #' @examples
@@ -75,6 +77,8 @@ open_device <- function(file_path) {
 #' octothorpe (`#`).
 #'
 #' @returns `NULL`. Adds to an existing graphics device.
+#'
+#' @family hex elements
 #'
 #' @export
 #'
@@ -157,6 +161,8 @@ add_hex <- function(col = "grey") {
 #' octothorpe (`#`).
 #'
 #' @returns `NULL`. Adds to an existing graphics device.
+#'
+#' @family hex content adders
 #'
 #' @export
 #'
@@ -262,6 +268,8 @@ add_text <- function(
 #'
 #' @returns `NULL`. Adds to an existing graphics device.
 #'
+#' @family hex content adders
+#'
 #' @export
 #'
 #' @examples
@@ -341,6 +349,8 @@ add_image <- function(
 #'
 #' @returns `NULL`. Adds to an existing graphics device.
 #'
+#' @family hex elements
+#'
 #' @export
 #'
 #' @examples
@@ -419,6 +429,8 @@ add_border <- function(
 #'
 #' @returns Named numeric. The device name and number where the hex has been
 #'     written.
+#'
+#' @family hex device handlers
 #'
 #' @export
 #'

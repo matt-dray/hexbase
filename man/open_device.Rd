@@ -37,3 +37,8 @@ add_text()
 add_border()
 close_device()
 }
+\seealso{
+Other hex device handlers: 
+\code{\link{close_device}()}
+}
+\concept{hex device handlers}

@@ -73,3 +73,8 @@ add_text()
 add_border()
 close_device()
 }
+\seealso{
+Other hex content adders: 
+\code{\link{add_image}()}
+}
+\concept{hex content adders}
