@@ -2,37 +2,37 @@
 % Please edit documentation in R/hexagon.R
 \name{add_image}
 \alias{add_image}
-\title{Add an Image}
+\title{Add an Image to the Hexagon}
 \usage{
-add_image(
-  image_object,
-  image_x = 0.5,
-  image_y = 0.7,
-  image_angle = 0,
-  image_width = 0.4
-)
+add_image(img, x = 0.5, y = 0.7, angle = 0, width = 0.4)
 }
 \arguments{
-\item{image_object}{Array. A PNG file read in by the user. \code{NULL} for no
-image.}
+\item{img}{Array. A PNG or JPEG file read in by the user, most likely
+using packages 'png' or 'jpeg'.}
 
-\item{image_x}{Numeric. Image location x-axis.}
+\item{x}{Numeric. Image location on the hexagon's x-axis.}
 
-\item{image_y}{Numeric. Image location y-axis.}
+\item{y}{Numeric. Image location on the hexagon's y-axis.}
 
-\item{image_angle}{Numeric. Text rotation in degrees.}
+\item{angle}{Numeric. Text rotation in degrees.}
 
-\item{image_width}{Numeric. Image width.}
+\item{width}{Numeric. Image width.}
 }
 \value{
 \code{NULL}. Adds to an existing graphics device.
 }
 \description{
-Overlay an image on the hexagon. Image content outside the hexagon will be
-clipped. Should be called after \link{open_device} and \link{add_hex}, in that order.
-Call this function separately for each image you want to add.
+Overlay an image on the hexagon. Call this function separately for each image
+you want to add.
 }
 \details{
+\subsection{Order}{
+
+When building a hex, this function should be called after \link{open_device} and
+\link{add_hex}. You can then use further calls to \link{add_image}, \link{add_text} and
+\link{add_border} (if desired) and finally \link{close_device}.
+}
+
 \subsection{Coordinates}{
 
 Coordinates should be provided within the x- and y-axis ranges, which are
@@ -43,9 +43,15 @@ both from 0 to 1, giving the centre as x = 0.5 and y = 0.5.
 temp_path <- tempfile(fileext = ".png")
 open_device(temp_path)
 add_hex()
-image_path <- system.file("img", "Rlogo.png", package = "png")
-image_png <- png::readPNG(image_path)
-add_image(image_png)
+img_path <- system.file("img", "Rlogo.png", package = "png")
+img_png <- png::readPNG(img_path)
+add_image(img_png)
 add_text()
+add_border()
 close_device()
 }
+\seealso{
+Other hex content adders: 
+\code{\link{add_text}()}
+}
+\concept{hex content adders}

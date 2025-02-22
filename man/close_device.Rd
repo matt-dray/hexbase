@@ -2,24 +2,39 @@
 % Please edit documentation in R/hexagon.R
 \name{close_device}
 \alias{close_device}
-\title{Close the Device}
+\title{Close the Device and Write to File}
 \usage{
 close_device()
 }
 \value{
-\code{NULL}. Adds to an existing graphics device.
+Named numeric. The device name and number where the hex has been
+written.
 }
 \description{
-Clip to the area of the outer hexagon and close the PNG plot device, which
-writes to the \code{file_path} specified in \link{open_device}.
+Clip to the area of the outer hexagon and shut down the PNG plot device,
+which writes to the \code{file_path} specified in \link{open_device}.
+}
+\details{
+\subsection{Order}{
+
+When building a hex, this function should be called at the end, after
+\link{open_device}, \link{add_hex} and any calls to \link{add_text}, \link{add_image} and
+\link{add_border}.
+}
 }
 \examples{
 temp_path <- tempfile(fileext = ".png")
 open_device(temp_path)
 add_hex()
-image_path <- system.file("img", "Rlogo.png", package = "png")
-image_png <- png::readPNG(image_path)
-add_image(image_png)
+img_path <- system.file("img", "Rlogo.png", package = "png")
+img_png <- png::readPNG(img_path)
+add_image(img_png)
 add_text()
+add_border()
 close_device()
 }
+\seealso{
+Other hex device handlers: 
+\code{\link{open_device}()}
+}
+\concept{hex device handlers}
