@@ -2,18 +2,22 @@
 # {hexbase}
 
 <!-- badges: start -->
-[![Project Status: Concept – Minimal or no implementation has been done yet, or the repository is only intended to be a limited example, demo, or proof-of-concept.](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-CMD-check](https://github.com/matt-dray/hexbase/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/matt-dray/hexbase/actions/workflows/R-CMD-check.yaml)
-[![test-coverage](https://github.com/matt-dray/hexbase/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/matt-dray/hexbase/actions/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
 ## What
 
-A dependency-light R package to help create simple hexagon-shaped sticker logos with the dimensions of [the Stickers Standard](https://sticker.how/#type-hexagon).
+An R package to help create simple hexagon-shaped sticker logos with the dimensions of [the Stickers Standard](https://sticker.how/#type-hexagon).
 
-This a concept package that may be unstable.
-It has little testing across systems.
-[Please contribute](https://github.com/matt-dray/hexbase/issues) if you have ideas or want to fix my code.
+{hexbase}:
+
+* is dependency-lightweight
+* lets you add as many text and image elements as you like
+* uses the grid graphics system, so is 'extensible'
+
+The package does what I need it to do but is not fully tested across all systems.
+[Please contribute](https://github.com/matt-dray/hexbase/issues) if you have bug reports or ideas.
 
 ## Install
 
@@ -26,7 +30,6 @@ remotes::install_github("matt-dray/hexbase")
 
 The package uses the inbuilt {grid} graphics system and the sister package [{gridGeometry}](https://cran.r-project.org/package=gridGeometry).
 The package may include more 'gridverse' packages in future.
-Otherwise it's BYOIAF ('bring your own images and fonts').
 
 ## Example
 
@@ -42,23 +45,25 @@ Build a sticker additively with a series of function calls:
 You can set various text and image properties like position, size, colour and angle.
 Text and images will be clipped if they exceed the boundary of the hexagon.
 
+It's up to the user to read their own images (via {[png](https://cran.r-project.org/package=png)} or {[jpeg](https://cran.r-project.org/package=jpeg)}) and install the fonts they want to use.
+
 Below is an extremely basic example.
-Note how you call each function independently (i.e. no pipes), much like writing base plots.
+Note how you call each function independently, much like writing base plots.
 
 ``` r
+# Somewhere to save it
+temp_path <- tempfile(fileext = ".png")
+
 # Bring your own image
 image_path <- system.file("img", "Rlogo.png", package = "png")
 image_png <- png::readPNG(image_path)
 
-# Somewhere to save it
-temp_path <- tempfile(fileext = ".png")
-
-# Build up and write the sticker
+# Build and write the hex
 hexbase::open_device(file_path = temp_path)
-hexbase::add_hex(col = "#BEBEBE")
+hexbase::add_hex(col = "#BEBEBE")  # named or hexadecimal
 hexbase::add_image(
   img = image_png,
-  y = 0.6,
+  y = 0.6,  # 0 to 1 on x and y axes
   angle = 20,
   width = 0.5
 )
@@ -66,10 +71,10 @@ hexbase::add_text(
   string = "example",
   y = 0.35,
   col = "red",
-  family = "mono",
+  family = "mono",  # bring your own font
   face = "bold.italic"
 )
-hexbase::add_text(
+hexbase::add_text(  # add multiple text and images
   string = "visit https://rstats.lol/ ftw",
   x = 0.73, 
   y = 0.17,
@@ -79,10 +84,7 @@ hexbase::add_text(
   family = "serif"
 )
 hexbase::add_border(col = "grey20")
-hexbase::close_device()
-
-# Optionally, open the image for inspection
-system(paste("open", temp_path))
+hexbase::close_device()  # writes to file
 ```
 
 That creates this absolutely stunning sticker, written to the specified `file_path`:
@@ -91,6 +93,12 @@ That creates this absolutely stunning sticker, written to the specified `file_pa
 
 Note that you can't rely on plot-window previews when you're developing your sticker (they lie).
 You must inspect the generated PNG file instead.
+From R, you could do this with a `system()` call:
+
+``` r
+# Open the PNG hex image for inspection
+system(paste("open", temp_path))
+```
 
 ## Related
 
