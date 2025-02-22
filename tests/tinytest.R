@@ -8,5 +8,5 @@ if (any(grepl("_R_CHECK", names(Sys.getenv()), fixed = TRUE))) {
 }
 
 if (requireNamespace("tinytest", quietly = TRUE)) {
-  tinytest::test_package("hexbase")
+  tinytest::test_package("gex")
 }

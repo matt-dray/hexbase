@@ -52,3 +52,6 @@ rsconnect/
 .DS_Store
 docs
 inst/doc
+
+# tests
+_tinysnapshot_review/
