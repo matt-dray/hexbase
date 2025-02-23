@@ -1,6 +1,7 @@
 # gex 0.2.0.9000
 
 * Added hex logo for the package.
+* Added 'resolution' argument to `open_device()`.
 
 # gex 0.2.0
 

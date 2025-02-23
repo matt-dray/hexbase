@@ -4,11 +4,15 @@
 \alias{open_device}
 \title{Open a PNG Device with Sticker-Standard Dimensions}
 \usage{
-open_device(file_path)
+open_device(file_path, resolution = 300)
 }
 \arguments{
 \item{file_path}{Character. File path to a .png where the output file will be
 saved. The containing directory must already exist.}
+
+\item{resolution}{Numeric. Resolution of the graphics device in pixels per
+inch (ppi). Higher values have better resolution but create larger file
+sizes.}
 }
 \value{
 Nothing. A graphics device is opened.

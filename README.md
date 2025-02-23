@@ -1,4 +1,4 @@
-# {gex} <a href="https://github.com/matt-dray/gex"><img src="man/figures/logo.png" align="right" height="139"/></a>
+# {gex} <a href='https://github.com/matt-dray/gex'><img src='man/figures/logo.png' align='right' width='200'/></a>
 
 <!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
@@ -58,7 +58,10 @@ image_path <- system.file("img", "Rlogo.png", package = "png")
 image_png <- png::readPNG(image_path)
 
 # Build and write the hex
-gex::open_device(file_path = temp_path)
+gex::open_device(
+  file_path = temp_path,
+  resolution = 300  # ppi, you can increase this
+)
 gex::add_hex(col = "#BEBEBE")  # named or hexadecimal
 gex::add_image(
   img = image_png,
@@ -86,9 +89,9 @@ gex::add_border(col = "grey20")
 gex::close_device()  # writes to file
 ```
 
-That creates this absolutely stunning sticker, written to the specified `file_path`:
+That creates this absolutely stunning demo sticker, written to the specified `file_path`:
 
-<img src='man/figures/readme-hex.png' width='300' alt="A grey hexagon with a dark grey border. An R logo is shown just above centre and angled at 30 degrees. Just below centre is the text 'example' in monospace red and bold font. On the lower right edge is the URL 'htps://rstats.lol' in smaller, blue italic serif font.">
+<img src='man/figures/example.png' width='200' alt="A grey hexagon with a dark grey border. An R logo is shown just above centre and angled at 30 degrees. Just below centre is the text 'example' in monospace red and bold font. On the lower right edge is the URL 'htps://rstats.lol' in smaller, blue italic serif font.">
 
 Note that you can't rely on plot-window previews when you're developing your sticker (they lie).
 You must inspect the generated PNG file instead.

@@ -9,7 +9,6 @@ dev_open <- open_device(temp_path)
 expect_null(dev_open)
 dev_close <- dev.off()
 expect_true(is.numeric(dev_close))
-unlink(temp_path)
 
 err_arg <- 'argument "file_path" is missing, with no default'
 expect_error(open_device(), err_arg)
@@ -21,6 +20,11 @@ expect_error(open_device("x/y.pdf"), err_png)
 
 err_dir <- "Argument 'file_path' must resolve to an existing directory\\."
 expect_error(open_device("x/y/z.png", err_dir))
+
+err_res <- "Argument 'resolution' must be a numeric value\\."
+expect_error(open_device(temp_path, resolution = "x"), err_res)
+
+unlink(temp_path)
 
 # Add hex -----------------------------------------------------------------
 
