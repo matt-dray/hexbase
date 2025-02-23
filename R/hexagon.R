@@ -6,6 +6,9 @@
 #'
 #' @param file_path Character. File path to a .png where the output file will be
 #'     saved. The containing directory must already exist.
+#' @param resolution Numeric. Resolution of the graphics device in pixels per
+#'     inch (ppi). Higher values have better resolution but create larger file
+#'     sizes.
 #'
 #' @details
 #'
@@ -31,7 +34,7 @@
 #' add_text()
 #' add_border()
 #' close_device()
-open_device <- function(file_path) {
+open_device <- function(file_path, resolution = 300) {
 
   if (tools::file_ext(file_path) != "png") {
     stop("Argument 'file_path' must end with '.png'.", call. = FALSE)
@@ -44,12 +47,16 @@ open_device <- function(file_path) {
     )
   }
 
+  if (!inherits(resolution, "numeric")) {
+    stop("Argument 'resolution' must be a numeric value.", call. = FALSE)
+  }
+
   grDevices::png(
     filename = file_path,
     width =  4.39,
     height = 5.08,
     units = "cm",
-    res = 1200,
+    res = resolution,
     bg = "transparent"
   )
 
