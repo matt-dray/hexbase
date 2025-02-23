@@ -1,3 +1,7 @@
+# gex 0.2.0.9000
+
+* Added hex logo for the package.
+
 # gex 0.2.0
 
 ## Breaking

@@ -1,6 +1,6 @@
 Package: gex
 Title: A Dependency-Light Hex-Logo Builder
-Version: 0.2.0
+Version: 0.2.0.9000
 Authors@R: 
     person("Matt", "Dray", , "mwdray@gmail.com", role = c("aut", "cre"))
 Description: A simple interface to create hexagon-shaped logos that help

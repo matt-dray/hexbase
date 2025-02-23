@@ -6,6 +6,8 @@
 \alias{gex-package}
 \title{gex: A Dependency-Light Hex-Logo Builder}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 A simple interface to create hexagon-shaped logos that help promote your R package or other projects. Uses the 'grid' system.
 }
 \seealso{
